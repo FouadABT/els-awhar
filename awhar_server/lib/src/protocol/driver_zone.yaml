@@ -1,0 +1,34 @@
+class: DriverZone
+table: driver_zones
+fields:
+  driverId: int, relation(parent=driver_profiles, onDelete=cascade)
+  
+  # Zone Info
+  zoneName: String
+  cityId: int, relation(parent=cities)
+  
+  # Geographic Boundary (GeoJSON string)
+  geoBoundary: String?  # Store polygon as GeoJSON
+  centerLatitude: double
+  centerLongitude: double
+  radiusKm: double, default=5.0
+  
+  # Pricing
+  extraFeeOutsideZone: double, default=0.0
+  
+  # Flags
+  isPrimary: bool, default=false
+  isActive: bool, default=true
+  
+  # Timestamps
+  createdAt: DateTime, default=now
+
+indexes:
+  drv_zone_driverId_idx:
+    fields: driverId
+  drv_zone_cityId_idx:
+    fields: cityId
+  drv_zone_isPrimary_idx:
+    fields: isPrimary
+  drv_zone_isActive_idx:
+    fields: isActive

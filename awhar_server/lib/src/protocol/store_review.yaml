@@ -1,0 +1,39 @@
+### Store Reviews (Client reviews Store, Client reviews Driver for store order) ###
+
+class: StoreReview
+table: store_reviews
+fields:
+  # The order this review is for
+  storeOrderId: int, relation(parent=store_orders)
+  
+  # Reviewer (always the client)
+  reviewerId: int, relation(parent=users)
+  
+  # Who is being reviewed
+  revieweeType: String  # 'store' or 'driver'
+  revieweeId: int       # storeId or driverId
+  
+  # Rating (1-5 stars)
+  rating: int
+  
+  # Review Content
+  comment: String?
+  
+  # Response from reviewee (optional)
+  response: String?
+  responseAt: DateTime?
+  
+  # Timestamps
+  createdAt: DateTime, default=now
+  updatedAt: DateTime, default=now
+
+indexes:
+  store_review_orderId_idx:
+    fields: storeOrderId
+  store_review_reviewerId_idx:
+    fields: reviewerId
+  store_review_revieweeType_idx:
+    fields: revieweeType, revieweeId
+  store_review_unique_idx:
+    fields: storeOrderId, reviewerId, revieweeType
+    unique: true

@@ -1,0 +1,51 @@
+# Agent Builder Converse Response
+#
+# Response from Kibana Agent Builder's /api/agent_builder/converse API.
+# This is the core integration point between the Flutter app and
+# Kibana-hosted AI agents (Concierge, Shield, Order Coordinator).
+#
+# The Agent Builder handles all AI logic including:
+# - LLM reasoning (Claude/GPT/Gemini via Elastic connectors)
+# - ES|QL tool execution on Elasticsearch indices
+# - Multi-turn conversation management
+# - Tool orchestration and result synthesis
+class: AgentBuilderConverseResponse
+fields:
+  ## Conversation ID for multi-turn sessions
+  conversationId: String
+
+  ## Round ID for this specific exchange
+  roundId: String?
+
+  ## The agent's natural language response
+  message: String
+
+  ## Steps taken by the agent (tool calls, reasoning)
+  steps: List<AgentBuilderStep>
+
+  ## Processing time in milliseconds
+  processingTimeMs: int
+
+  ## Whether the request succeeded
+  success: bool
+
+  ## Error message if success is false
+  errorMessage: String?
+
+  ## Agent ID that was used
+  agentId: String?
+
+  ## LLM model used (e.g. "google-gemini-2.5-flash")
+  model: String?
+
+  ## Number of LLM calls made during this round
+  llmCalls: int?
+
+  ## Total input tokens consumed by the visible LLM
+  inputTokens: int?
+
+  ## Total output tokens consumed by the visible LLM
+  outputTokens: int?
+
+  ## Estimated cost in USD for this round (visible model only)
+  estimatedCostUsd: double?

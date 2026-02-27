@@ -1,0 +1,39 @@
+class: DriverStatistics
+table: driver_statistics
+fields:
+  driverId: int, relation(parent=driver_profiles, onDelete=cascade)
+  
+  # Time Period
+  periodType: String  # daily, weekly, monthly
+  periodStart: DateTime
+  periodEnd: DateTime
+  
+  # Orders
+  totalOrders: int, default=0
+  completedOrders: int, default=0
+  cancelledOrders: int, default=0
+  
+  # Revenue
+  totalRevenue: double, default=0.0
+  platformCommission: double, default=0.0
+  netRevenue: double, default=0.0
+  
+  # Performance
+  averageRating: double, default=0.0
+  averageResponseTime: int, default=0  # in seconds
+  averageCompletionTime: int, default=0  # in minutes
+  
+  # Availability
+  hoursOnline: double, default=0.0
+  hoursOffline: double, default=0.0
+  
+  # Timestamp
+  createdAt: DateTime, default=now
+
+indexes:
+  drv_stats_driverId_idx:
+    fields: driverId
+  drv_stats_periodType_idx:
+    fields: periodType
+  drv_stats_periodStart_idx:
+    fields: periodStart

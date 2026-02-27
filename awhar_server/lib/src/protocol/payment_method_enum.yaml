@@ -1,0 +1,7 @@
+enum: PaymentMethod
+serialized: byIndex
+values:
+  - credit_card
+  - paypal
+  - bank_transfer
+  - cash_on_delivery

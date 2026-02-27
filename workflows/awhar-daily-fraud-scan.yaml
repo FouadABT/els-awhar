@@ -1,0 +1,131 @@
+name: Awhar Daily Fraud Scan
+description: Scheduled daily fraud detection pipeline. Runs multiple fraud checks using the Awhar Shield agent and creates a Kibana case documenting findings.
+enabled: true
+tags:
+  - awhar
+  - fraud
+  - security
+  - scheduled
+  - automation
+triggers:
+  - type: manual
+  - type: scheduled
+    with:
+      every: 168h
+steps:
+  - name: platform_summary
+    type: kibana.request
+    with:
+      method: POST
+      path: /api/agent_builder/converse
+      headers:
+        kbn-xsrf: 'true'
+      body:
+        agent_id: '2'
+        connector_id: 'Google-Gemini-2-5-Flash'
+        input: Get the platform summary for the last 30 days. Report total requests and completion rate and cancellation rate and health status.
+    timeout: 120s
+
+  - name: log_summary
+    type: console
+    with:
+      message: 'Platform Summary: {{ steps.platform_summary.output.response.message }}'
+
+  - name: serial_cancellers
+    type: kibana.request
+    with:
+      method: POST
+      path: /api/agent_builder/converse
+      headers:
+        kbn-xsrf: 'true'
+      body:
+        agent_id: '2'
+        connector_id: 'Google-Gemini-2-5-Flash'
+        conversation_id: '{{ steps.platform_summary.output.conversation_id }}'
+        input: Now detect serial cancellers. Find clients who frequently cancel orders. List the top offenders with their risk scores.
+    timeout: 120s
+
+  - name: log_cancellers
+    type: console
+    with:
+      message: 'Serial Cancellers: {{ steps.serial_cancellers.output.response.message }}'
+
+  - name: ghost_orders
+    type: kibana.request
+    with:
+      method: POST
+      path: /api/agent_builder/converse
+      headers:
+        kbn-xsrf: 'true'
+      body:
+        agent_id: '2'
+        connector_id: 'Google-Gemini-2-5-Flash'
+        conversation_id: '{{ steps.platform_summary.output.conversation_id }}'
+        input: Now detect ghost orders. Find clients who create orders but never accept driver proposals. List the top offenders.
+    timeout: 120s
+
+  - name: log_ghost
+    type: console
+    with:
+      message: 'Ghost Orders: {{ steps.ghost_orders.output.response.message }}'
+
+  - name: generate_report
+    type: kibana.request
+    with:
+      method: POST
+      path: /api/agent_builder/converse
+      headers:
+        kbn-xsrf: 'true'
+      body:
+        agent_id: '2'
+        connector_id: 'Google-Gemini-2-5-Flash'
+        conversation_id: '{{ steps.platform_summary.output.conversation_id }}'
+        input: Based on all the fraud checks provide a comprehensive daily fraud report. Include overall health and threats detected per category and highest risk users and recommended actions.
+    timeout: 120s
+
+  - name: create_fraud_case
+    type: kibana.createCaseDefaultSpace
+    with:
+      connector:
+        fields: null
+        id: none
+        name: none
+        type: .none
+      title: Daily Fraud Scan Report
+      description: '{{ steps.generate_report.output.response.message }}'
+      owner: cases
+      severity: medium
+      tags:
+        - awhar
+        - fraud-scan
+        - automated
+        - daily
+      settings:
+        syncAlerts: false
+
+  # =========================================================================
+  # SEND EMAIL NOTIFICATION
+  # =========================================================================
+
+  - name: send_fraud_email
+    type: email
+    connector-id: "e6fbf5ac-c28b-4b9d-833d-c518a3ca97eb"
+    with:
+      to:
+        - "fouad.abt@gmail.com"
+      subject: "🛡️ Awhar Daily Fraud Scan Report"
+      message: |
+        AWHAR DAILY FRAUD SCAN REPORT
+        ==============================
+
+        {{ steps.generate_report.output.response.message }}
+
+        ---
+        Case ID: {{ steps.create_fraud_case.output.id }}
+        Generated automatically by Awhar Shield Agent
+        Powered by Elasticsearch Agent Builder
+
+  - name: log_complete
+    type: console
+    with:
+      message: 'Daily Fraud Scan Complete. Case: {{ steps.create_fraud_case.output.id }} | Email sent to fouad.abt@gmail.com'

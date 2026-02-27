@@ -1,0 +1,68 @@
+### Orders & Coordination Records ###
+
+class: Order
+table: orders
+fields:
+  # Parties
+  clientId: int, relation(parent=user_clients, onDelete=restrict)
+  driverId: int?, relation(parent=driver_profiles, onDelete=restrict)
+  serviceId: int, relation(parent=services)
+  
+  # Locations
+  pickupAddressId: int?, relation(parent=addresses)
+  dropoffAddressId: int?, relation(parent=addresses)
+  
+  # If addresses not saved, store raw location
+  pickupLatitude: double?
+  pickupLongitude: double?
+  pickupAddress: String?
+  dropoffLatitude: double?
+  dropoffLongitude: double?
+  dropoffAddress: String?
+  
+  # Distance & Pricing
+  estimatedDistanceKm: double?
+  estimatedPrice: double?
+  agreedPrice: double?
+  finalPrice: double?
+  
+  # Currency (based on driver's country)
+  currency: String, default='MAD'        # Currency code (MAD, USD, EUR)
+  currencySymbol: String, default='DH'   # Currency symbol for display
+  
+  # Price Negotiation
+  clientProposedPrice: double?
+  driverCounterPrice: double?
+  priceNegotiationStatus: PriceNegotiationStatus?
+  
+  # Order Details
+  notes: String?
+  clientInstructions: String?
+  
+  # Expiry
+  expiresAt: DateTime?
+  
+  # Status
+  status: OrderStatus?
+  
+  # Timestamps
+  createdAt: DateTime, default=now
+  acceptedAt: DateTime?
+  startedAt: DateTime?
+  completedAt: DateTime?
+  cancelledAt: DateTime?
+  
+  # Cancellation
+  cancellationReason: String?
+  cancelledByUserId: int?
+  cancelledBy: CancellerType?
+
+indexes:
+  order_clientId_idx:
+    fields: clientId
+  order_driverId_idx:
+    fields: driverId
+  order_status_idx:
+    fields: status
+  order_createdAt_idx:
+    fields: createdAt

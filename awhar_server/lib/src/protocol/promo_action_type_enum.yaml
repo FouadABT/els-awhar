@@ -1,0 +1,11 @@
+### Promo Action Type Enum ###
+# Defines what happens when user taps a promo banner
+
+enum: PromoActionType
+values:
+  - none        # No action, just display
+  - link        # Open external URL
+  - screen      # Navigate to app screen
+  - store       # Navigate to store profile
+  - driver      # Navigate to driver profile
+  - service     # Navigate to service details

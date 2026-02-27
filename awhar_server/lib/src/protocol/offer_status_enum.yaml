@@ -1,0 +1,8 @@
+enum: OfferStatus
+serialized: byIndex
+values:
+  - pending
+  - accepted
+  - rejected
+  - expired
+  - withdrawn

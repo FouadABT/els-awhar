@@ -1,0 +1,9 @@
+## Service type enumeration for different service offerings
+enum: ServiceType
+values:
+  - ride        # Standard ride/taxi service
+  - delivery    # Package or item delivery
+  - purchase    # Buy items (Grocery, Snacks, etc.)
+  - moving      # Furniture or moving service
+  - task        # General errand
+  - other       # Other custom services

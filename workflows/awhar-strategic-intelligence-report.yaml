@@ -1,0 +1,312 @@
+# =============================================================================
+# Workflow: Awhar Strategic Intelligence Report
+# Category: ai-agents, analytics
+#
+# Multi-agent analytics pipeline that orchestrates 3 agents to build a
+# comprehensive business intelligence report:
+#   1. Awhar Strategist - Revenue, funnel, search insights, feature adoption
+#   2. Awhar Pulse - Real-time demand alerts, driver needs
+#   3. Awhar Concierge - Platform overview and context
+#
+# Creates a Kibana case with the full strategic analysis.
+#
+# Author: Awhar Team
+# Created: 2026-02-26
+# Tags: awhar, strategy, multi-agent, analytics, intelligence
+# =============================================================================
+version: "1"
+name: "Awhar: Strategic Intelligence Report"
+description: >
+  Multi-agent business intelligence pipeline. Orchestrates the Strategist,
+  Pulse, and Concierge agents to analyze revenue, user behavior, demand gaps,
+  and platform health — then compiles everything into a Kibana case.
+enabled: true
+
+tags:
+  - awhar
+  - strategy
+  - analytics
+  - multi-agent
+  - intelligence
+
+triggers:
+  - type: manual
+  - type: scheduled
+    with:
+      every: "168h"
+
+steps:
+
+  # =========================================================================
+  # PHASE 1: REVENUE & BUSINESS METRICS (Strategist Agent)
+  # =========================================================================
+
+  - name: revenue_analysis
+    type: kibana.request
+    with:
+      method: POST
+      path: /api/agent_builder/converse
+      headers:
+        kbn-xsrf: 'true'
+      body:
+        agent_id: awhar-strategist
+        connector_id: 'Google-Gemini-2-5-Flash'
+        input: >
+          Analyze our revenue metrics. Report total revenue, average order value,
+          platform commission, driver earnings, and transaction counts.
+          Break down by payment method and status.
+    timeout: 180s
+
+  - name: log_revenue
+    type: console
+    with:
+      message: "Revenue Analysis: {{ steps.revenue_analysis.output.response.message }}"
+
+  # =========================================================================
+  # PHASE 2: CONVERSION FUNNEL (Strategist Agent - same conversation)
+  # =========================================================================
+
+  - name: funnel_analysis
+    type: kibana.request
+    with:
+      method: POST
+      path: /api/agent_builder/converse
+      headers:
+        kbn-xsrf: 'true'
+      body:
+        agent_id: awhar-strategist
+        connector_id: 'Google-Gemini-2-5-Flash'
+        conversation_id: '{{ steps.revenue_analysis.output.conversation_id }}'
+        input: >
+          Now analyze the conversion funnel from search to completed request.
+          Show counts at each stage and identify where users drop off.
+          What is the biggest bottleneck?
+    timeout: 180s
+
+  - name: log_funnel
+    type: console
+    with:
+      message: "Funnel Analysis: {{ steps.funnel_analysis.output.response.message }}"
+
+  # =========================================================================
+  # PHASE 3: SEARCH INSIGHTS (Strategist Agent - same conversation)
+  # =========================================================================
+
+  - name: search_insights
+    type: kibana.request
+    with:
+      method: POST
+      path: /api/agent_builder/converse
+      headers:
+        kbn-xsrf: 'true'
+      body:
+        agent_id: awhar-strategist
+        connector_id: 'Google-Gemini-2-5-Flash'
+        conversation_id: '{{ steps.revenue_analysis.output.conversation_id }}'
+        input: >
+          Analyze search behavior and effectiveness. What are users searching for?
+          Which searches return zero results (unmet demand)?
+          What can we improve?
+    timeout: 180s
+
+  - name: log_search
+    type: console
+    with:
+      message: "Search Insights: {{ steps.search_insights.output.response.message }}"
+
+  # =========================================================================
+  # PHASE 4: FEATURE ADOPTION (Strategist Agent - same conversation)
+  # =========================================================================
+
+  - name: feature_adoption
+    type: kibana.request
+    with:
+      method: POST
+      path: /api/agent_builder/converse
+      headers:
+        kbn-xsrf: 'true'
+      body:
+        agent_id: awhar-strategist
+        connector_id: 'Google-Gemini-2-5-Flash'
+        conversation_id: '{{ steps.revenue_analysis.output.conversation_id }}'
+        input: >
+          Track feature adoption patterns. Which features are most used?
+          Which are underused? What should we prioritize for development?
+    timeout: 180s
+
+  - name: log_features
+    type: console
+    with:
+      message: "Feature Adoption: {{ steps.feature_adoption.output.response.message }}"
+
+  # =========================================================================
+  # PHASE 5: DEMAND & SUPPLY GAPS (Pulse Agent)
+  # =========================================================================
+
+  - name: demand_pulse
+    type: kibana.request
+    with:
+      method: POST
+      path: /api/agent_builder/converse
+      headers:
+        kbn-xsrf: 'true'
+      body:
+        agent_id: awhar-pulse
+        connector_id: 'Google-Gemini-2-5-Flash'
+        input: >
+          Check current driver demand alerts across all service types.
+          How many pending requests are unmatched? Which service types have
+          the biggest driver shortages? Provide actionable recommendations.
+    timeout: 120s
+
+  - name: log_pulse
+    type: console
+    with:
+      message: "Demand Pulse: {{ steps.demand_pulse.output.response.message }}"
+
+  # =========================================================================
+  # PHASE 6: GEO ANALYTICS (Strategist Agent - new conversation)
+  # =========================================================================
+
+  - name: geo_analytics
+    type: kibana.request
+    with:
+      method: POST
+      path: /api/agent_builder/converse
+      headers:
+        kbn-xsrf: 'true'
+      body:
+        agent_id: awhar-strategist
+        connector_id: 'Google-Gemini-2-5-Flash'
+        input: >
+          Analyze service request distribution by type and geography.
+          Show completion rates, cancellation rates, and average pricing.
+          Identify geographic expansion opportunities.
+    timeout: 180s
+
+  - name: log_geo
+    type: console
+    with:
+      message: "Geo Analytics: {{ steps.geo_analytics.output.response.message }}"
+
+  # =========================================================================
+  # PHASE 7: PLATFORM CONTEXT (Concierge Agent)
+  # =========================================================================
+
+  - name: platform_overview
+    type: kibana.request
+    with:
+      method: POST
+      path: /api/agent_builder/converse
+      headers:
+        kbn-xsrf: 'true'
+      body:
+        agent_id: awhar-concierge
+        connector_id: 'Google-Gemini-2-5-Flash'
+        input: >
+          Give me a platform overview: total services, categories, popular services,
+          and average pricing in MAD. What are the platform's current strengths?
+    timeout: 120s
+
+  - name: log_platform
+    type: console
+    with:
+      message: "Platform Overview: {{ steps.platform_overview.output.response.message }}"
+
+  # =========================================================================
+  # PHASE 8: CREATE STRATEGIC REPORT CASE
+  # =========================================================================
+
+  - name: create_strategy_case
+    type: kibana.createCaseDefaultSpace
+    with:
+      connector:
+        fields: null
+        id: none
+        name: none
+        type: .none
+      title: "Weekly Strategic Intelligence Report"
+      description: |
+        # Awhar Strategic Intelligence Report
+
+        ## Revenue & Business Metrics
+        {{ steps.revenue_analysis.output.response.message }}
+
+        ## Conversion Funnel Analysis
+        {{ steps.funnel_analysis.output.response.message }}
+
+        ## Search Behavior Insights
+        {{ steps.search_insights.output.response.message }}
+
+        ## Feature Adoption
+        {{ steps.feature_adoption.output.response.message }}
+
+        ## Demand & Supply Status
+        {{ steps.demand_pulse.output.response.message }}
+
+        ## Geographic Analytics
+        {{ steps.geo_analytics.output.response.message }}
+
+        ## Platform Overview
+        {{ steps.platform_overview.output.response.message }}
+      owner: cases
+      severity: low
+      tags:
+        - awhar
+        - strategic-report
+        - automated
+        - weekly
+        - multi-agent
+      settings:
+        syncAlerts: false
+
+  # =========================================================================
+  # SEND EMAIL NOTIFICATION
+  # =========================================================================
+
+  - name: send_strategy_email
+    type: email
+    connector-id: "e6fbf5ac-c28b-4b9d-833d-c518a3ca97eb"
+    with:
+      to:
+        - "fouad.abt@gmail.com"
+      subject: "📊 Awhar Weekly Strategic Intelligence Report"
+      message: |
+        AWHAR WEEKLY STRATEGIC INTELLIGENCE REPORT
+        =============================================
+
+        REVENUE & BUSINESS METRICS
+        {{ steps.revenue_analysis.output.response.message }}
+
+        CONVERSION FUNNEL ANALYSIS
+        {{ steps.funnel_analysis.output.response.message }}
+
+        SEARCH BEHAVIOR INSIGHTS
+        {{ steps.search_insights.output.response.message }}
+
+        FEATURE ADOPTION
+        {{ steps.feature_adoption.output.response.message }}
+
+        DEMAND & SUPPLY STATUS
+        {{ steps.demand_pulse.output.response.message }}
+
+        GEOGRAPHIC ANALYTICS
+        {{ steps.geo_analytics.output.response.message }}
+
+        PLATFORM OVERVIEW
+        {{ steps.platform_overview.output.response.message }}
+
+        ---
+        Case ID: {{ steps.create_strategy_case.output.id }}
+        Generated automatically by Awhar Multi-Agent Intelligence System
+        Powered by Elasticsearch Agent Builder
+
+  - name: log_complete
+    type: console
+    with:
+      message: |
+        === STRATEGIC INTELLIGENCE REPORT COMPLETE ===
+        Case created: {{ steps.create_strategy_case.output.id }}
+        Email sent to: fouad.abt@gmail.com
+        Agents used: awhar-strategist, awhar-pulse, awhar-concierge
+        Steps executed: 7 agent conversations + 1 case creation + 1 email

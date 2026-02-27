@@ -1,0 +1,12 @@
+# AI Demand Hotspot
+class: AiDemandHotspot
+fields:
+  latitude: double
+  longitude: double
+  radiusKm: double
+  demandScore: double
+  predictedRequests: int
+  peakHours: List<int>
+  topServices: List<String>
+  confidence: AiConfidenceLevel
+  locationName: String?

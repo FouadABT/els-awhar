@@ -1,0 +1,20 @@
+# Store Search Hit
+class: EsStoreHit
+fields:
+  id: int
+  userId: int?
+  storeCategoryId: int?
+  categoryName: String?
+  name: String?
+  description: String?
+  logoUrl: String?
+  address: String?
+  latitude: double?
+  longitude: double?
+  ratingAverage: double?
+  ratingCount: int?
+  isActive: bool
+  isOpen: bool
+  deliveryRadiusKm: double?
+  distance: double?
+  score: double?

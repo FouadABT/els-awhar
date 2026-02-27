@@ -1,0 +1,36 @@
+### Store Categories (Restaurant, Market, Pharmacy, etc.) ###
+
+class: StoreCategory
+table: store_categories
+fields:
+  # Names (Multi-language)
+  nameEn: String
+  nameAr: String?
+  nameFr: String?
+  nameEs: String?
+  
+  # Descriptions
+  descriptionEn: String?
+  descriptionAr: String?
+  descriptionFr: String?
+  descriptionEs: String?
+  
+  # Visual
+  iconName: String  # Icon identifier (e.g., 'restaurant', 'shopping_cart')
+  iconUrl: String?
+  imageUrl: String?
+  colorHex: String?
+  
+  # Settings
+  isActive: bool, default=true
+  displayOrder: int, default=0
+  
+  # Timestamps
+  createdAt: DateTime, default=now
+  updatedAt: DateTime, default=now
+
+indexes:
+  store_cat_isActive_idx:
+    fields: isActive
+  store_cat_displayOrder_idx:
+    fields: displayOrder

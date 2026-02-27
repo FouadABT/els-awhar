@@ -1,0 +1,31 @@
+class: DriverOffer
+table: driver_offers
+fields:
+  # Relations
+  orderId: int, relation(parent=orders, onDelete=cascade)
+  driverId: int, relation(parent=driver_profiles, onDelete=cascade)
+  
+  # Offer Details
+  offeredPrice: double
+  message: String?
+  
+  # Status
+  status: OfferStatus?
+  
+  # Timestamps
+  createdAt: DateTime, default=now
+  respondedAt: DateTime?
+  expiresAt: DateTime?
+
+indexes:
+  driver_offer_orderId_idx:
+    fields: orderId
+  driver_offer_driverId_idx:
+    fields: driverId
+  driver_offer_status_idx:
+    fields: status
+  driver_offer_createdAt_idx:
+    fields: createdAt
+  driver_offer_order_driver_unique:
+    fields: orderId, driverId
+    unique: true

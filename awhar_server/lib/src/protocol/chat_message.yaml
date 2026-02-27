@@ -1,0 +1,35 @@
+class: ChatMessage
+table: chat_messages
+fields:
+  # Relations
+  orderId: int, relation(parent=orders, onDelete=cascade)
+  senderId: int, relation(parent=users)
+  receiverId: int, relation(parent=users)
+  
+  # Message Content
+  message: String
+  messageType: MessageType?
+  attachmentUrl: String?
+  
+  # Status
+  isRead: bool, default=false
+  readAt: DateTime?
+  
+  # Firebase Sync
+  firebaseId: String?
+  
+  # Timestamps
+  createdAt: DateTime, default=now
+
+indexes:
+  chat_message_orderId_idx:
+    fields: orderId
+  chat_message_senderId_idx:
+    fields: senderId
+  chat_message_receiverId_idx:
+    fields: receiverId
+  chat_message_firebaseId_idx:
+    fields: firebaseId
+    unique: true
+  chat_message_createdAt_idx:
+    fields: createdAt

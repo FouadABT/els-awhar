@@ -1,0 +1,6 @@
+# AI Agent Status Response
+class: AiAgentStatusResponse
+fields:
+  agents: List<AiAgentStatus>
+  elasticsearchConnected: bool
+  lastHealthCheck: DateTime

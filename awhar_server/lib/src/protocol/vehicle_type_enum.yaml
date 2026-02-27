@@ -1,0 +1,9 @@
+enum: VehicleType
+serialized: byIndex
+values:
+  - car
+  - motorcycle
+  - bicycle
+  - van
+  - truck
+  - scooter

@@ -1,0 +1,29 @@
+### Store Order Items (Denormalized for historical accuracy) ###
+
+class: StoreOrderItem
+table: store_order_items
+fields:
+  # Parent Order
+  storeOrderId: int, relation(parent=store_orders, onDelete=cascade)
+  
+  # Product Reference (may be null if product deleted)
+  productId: int?
+  
+  # Snapshot of product at time of order (for historical accuracy)
+  productName: String
+  productPrice: double
+  productImageUrl: String?
+  
+  # Order Details
+  quantity: int
+  itemTotal: double  # productPrice * quantity
+  
+  # Notes (e.g., "extra cheese", "no onions")
+  notes: String?
+  
+  # Timestamps
+  createdAt: DateTime, default=now
+
+indexes:
+  store_order_item_orderId_idx:
+    fields: storeOrderId

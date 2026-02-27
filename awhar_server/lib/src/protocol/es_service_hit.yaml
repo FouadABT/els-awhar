@@ -1,0 +1,13 @@
+# Service Search Hit
+class: EsServiceHit
+fields:
+  id: int
+  categoryId: int?
+  categoryName: String?
+  nameEn: String?
+  nameAr: String?
+  nameFr: String?
+  nameEs: String?
+  descriptionEn: String?
+  isActive: bool
+  score: double?

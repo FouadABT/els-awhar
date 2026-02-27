@@ -1,0 +1,18 @@
+# Driver Search Hit
+class: EsDriverHit
+fields:
+  id: int
+  userId: int
+  displayName: String?
+  profilePhotoUrl: String?
+  vehicleType: String?
+  ratingAverage: double?
+  ratingCount: int?
+  totalCompletedOrders: int?
+  isOnline: bool
+  isVerified: bool
+  isPremium: bool
+  latitude: double?
+  longitude: double?
+  distance: double?
+  score: double?

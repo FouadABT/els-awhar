@@ -1,0 +1,5 @@
+## Rating type enum
+enum: RatingType
+values:
+  - client_to_driver   # Client rates driver after service
+  - driver_to_client   # Driver rates client after service

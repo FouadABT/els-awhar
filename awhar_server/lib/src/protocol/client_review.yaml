@@ -1,0 +1,30 @@
+class: ClientReview
+table: client_reviews
+fields:
+  # Relations
+  orderId: int, relation(parent=orders, onDelete=cascade)
+  driverId: int, relation(parent=driver_profiles)
+  clientId: int, relation(parent=user_clients)
+  
+  # Review Content
+  rating: int
+  comment: String?
+  
+  # Categories (1-5 ratings)
+  communicationRating: int?
+  respectRating: int?
+  paymentPromptness: int?
+  
+  # Timestamps
+  createdAt: DateTime, default=now
+
+indexes:
+  client_review_orderId_idx:
+    fields: orderId
+    unique: true
+  client_review_driverId_idx:
+    fields: driverId
+  client_review_clientId_idx:
+    fields: clientId
+  client_review_createdAt_idx:
+    fields: createdAt

@@ -1,0 +1,112 @@
+name: Awhar User Engagement Monitor
+description: Multi-agent engagement pipeline. Uses Strategist for funnel analysis and Pulse for churn risks and milestones to enable proactive user retention.
+enabled: true
+tags:
+  - awhar
+  - engagement
+  - churn
+  - multi-agent
+  - scheduled
+triggers:
+  - type: manual
+  - type: scheduled
+    with:
+      every: 168h
+steps:
+  - name: funnel_analysis
+    type: kibana.request
+    with:
+      method: POST
+      path: /api/agent_builder/converse
+      headers:
+        kbn-xsrf: 'true'
+      body:
+        agent_id: awhar-strategist
+        connector_id: 'Google-Gemini-2-5-Flash'
+        input: Run a full conversion funnel analysis. Show me the drop-off rates at each stage from search to completed request. Identify the biggest bottleneck.
+    timeout: 120s
+
+  - name: log_funnel
+    type: console
+    with:
+      message: 'Funnel Analysis: {{ steps.funnel_analysis.output.response.message }}'
+
+  - name: feature_adoption
+    type: kibana.request
+    with:
+      method: POST
+      path: /api/agent_builder/converse
+      headers:
+        kbn-xsrf: 'true'
+      body:
+        agent_id: awhar-strategist
+        connector_id: 'Google-Gemini-2-5-Flash'
+        conversation_id: '{{ steps.funnel_analysis.output.conversation_id }}'
+        input: Now check feature adoption rates. Which features are most and least used. Identify underused features that need attention.
+    timeout: 120s
+
+  - name: log_features
+    type: console
+    with:
+      message: 'Feature Adoption: {{ steps.feature_adoption.output.response.message }}'
+
+  - name: churn_risks
+    type: kibana.request
+    with:
+      method: POST
+      path: /api/agent_builder/converse
+      headers:
+        kbn-xsrf: 'true'
+      body:
+        agent_id: awhar-pulse
+        connector_id: 'Google-Gemini-2-5-Flash'
+        input: Identify users at risk of churning. Find users with declining activity over the past 7 days compared to the previous 7 days. List the top churn risks.
+    timeout: 120s
+
+  - name: log_churn
+    type: console
+    with:
+      message: 'Churn Risks: {{ steps.churn_risks.output.response.message }}'
+
+  - name: milestone_check
+    type: kibana.request
+    with:
+      method: POST
+      path: /api/agent_builder/converse
+      headers:
+        kbn-xsrf: 'true'
+      body:
+        agent_id: awhar-pulse
+        connector_id: 'Google-Gemini-2-5-Flash'
+        conversation_id: '{{ steps.churn_risks.output.conversation_id }}'
+        input: Find users approaching order milestones such as 5th or 10th or 25th or 50th order. These users should receive celebration notifications.
+    timeout: 120s
+
+  - name: log_milestones
+    type: console
+    with:
+      message: 'User Milestones: {{ steps.milestone_check.output.response.message }}'
+
+  - name: onboarding_check
+    type: kibana.request
+    with:
+      method: POST
+      path: /api/agent_builder/converse
+      headers:
+        kbn-xsrf: 'true'
+      body:
+        agent_id: awhar-pulse
+        connector_id: 'Google-Gemini-2-5-Flash'
+        conversation_id: '{{ steps.churn_risks.output.conversation_id }}'
+        input: Find new users who signed up in the last 7 days but have zero completed orders. These need onboarding nudges.
+    timeout: 120s
+
+  - name: log_onboarding
+    type: console
+    with:
+      message: 'Onboarding Targets: {{ steps.onboarding_check.output.response.message }}'
+
+  - name: engagement_summary
+    type: console
+    with:
+      message: Engagement Monitor Complete. Funnel bottleneck identified and churn risks flagged and milestones found.

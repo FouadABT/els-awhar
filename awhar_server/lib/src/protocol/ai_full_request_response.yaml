@@ -1,0 +1,7 @@
+# AI Full Request Processing Response
+class: AiFullRequestResponse
+fields:
+  conciergeResponse: AiRequestConciergeResponse?
+  matchingResponse: AiDriverMatchingResponse?
+  totalProcessingTimeMs: int
+  timestamp: DateTime

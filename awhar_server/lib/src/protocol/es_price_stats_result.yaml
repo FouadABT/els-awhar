@@ -1,0 +1,4 @@
+# Price Stats Response
+class: EsPriceStatsResult
+fields:
+  stats: List<EsPriceStats>

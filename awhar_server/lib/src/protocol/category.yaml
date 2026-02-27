@@ -1,0 +1,40 @@
+### Services & Categories ###
+
+class: Category
+table: categories
+fields:
+  # Names (Multi-language)
+  nameEn: String
+  nameAr: String?
+  nameFr: String?
+  nameEs: String?
+  
+  # Descriptions
+  descriptionEn: String?
+  descriptionAr: String?
+  descriptionFr: String?
+  descriptionEs: String?
+  
+  # Visual
+  iconName: String  # Icon identifier
+  iconUrl: String?
+  colorHex: String?
+  
+  # Settings
+  isActive: bool, default=true
+  displayOrder: int, default=0
+  
+  # Parent Category (for sub-categories)
+  parentCategoryId: int?, relation(parent=categories)
+  
+  # Timestamps
+  createdAt: DateTime, default=now
+  updatedAt: DateTime, default=now
+
+indexes:
+  cat_isActive_idx:
+    fields: isActive
+  cat_displayOrder_idx:
+    fields: displayOrder
+  cat_parentCategoryId_idx:
+    fields: parentCategoryId

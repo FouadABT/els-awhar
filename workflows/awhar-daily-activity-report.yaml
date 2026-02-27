@@ -1,0 +1,167 @@
+name: Awhar Weekly Activity Report
+description: >
+  Weekly email report summarizing all platform activity. Uses the Strategist
+  and Pulse agents to analyze orders, revenue, user activity, and driver
+  performance — then emails a formatted summary via Brevo SMTP.
+enabled: true
+tags:
+  - awhar
+  - weekly-report
+  - email
+  - automation
+  - analytics
+triggers:
+  - type: manual
+  - type: scheduled
+    with:
+      every: 168h
+
+steps:
+
+  # =========================================================================
+  # PHASE 1: ORDER & REVENUE SUMMARY (Strategist Agent)
+  # =========================================================================
+
+  - name: daily_orders
+    type: kibana.request
+    with:
+      method: POST
+      path: /api/agent_builder/converse
+      headers:
+        kbn-xsrf: 'true'
+      body:
+        agent_id: awhar-strategist
+        connector_id: 'Google-Gemini-2-5-Flash'
+        input: >
+          Give me today's activity summary for the last 24 hours. Include:
+          1. Total new requests created and their statuses
+          2. Total revenue and number of completed transactions
+          3. Average order value
+          4. Top service categories by request count
+          Be concise with numbers, use bullet points.
+    timeout: 180s
+
+  - name: log_orders
+    type: console
+    with:
+      message: 'Daily Orders: {{ steps.daily_orders.output.response.message }}'
+
+  # =========================================================================
+  # PHASE 2: USER ACTIVITY (Pulse Agent)
+  # =========================================================================
+
+  - name: user_activity
+    type: kibana.request
+    with:
+      method: POST
+      path: /api/agent_builder/converse
+      headers:
+        kbn-xsrf: 'true'
+      body:
+        agent_id: awhar-pulse
+        connector_id: 'Google-Gemini-2-5-Flash'
+        input: >
+          Summarize user activity for the last 24 hours:
+          1. New user signups
+          2. Active users (users who placed orders or searched)
+          3. Any users at risk of churning
+          4. Users who hit milestones (5th, 10th, 25th order)
+          Be concise with numbers, use bullet points.
+    timeout: 180s
+
+  - name: log_users
+    type: console
+    with:
+      message: 'User Activity: {{ steps.user_activity.output.response.message }}'
+
+  # =========================================================================
+  # PHASE 3: DRIVER & SUPPLY STATUS (Strategist Agent - new conversation)
+  # =========================================================================
+
+  - name: driver_status
+    type: kibana.request
+    with:
+      method: POST
+      path: /api/agent_builder/converse
+      headers:
+        kbn-xsrf: 'true'
+      body:
+        agent_id: awhar-strategist
+        connector_id: 'Google-Gemini-2-5-Flash'
+        input: >
+          Summarize driver and supply status:
+          1. Total active drivers
+          2. Requests matched vs unmatched
+          3. Average driver rating
+          4. Any service categories with driver shortages
+          Be concise with numbers, use bullet points.
+    timeout: 180s
+
+  - name: log_drivers
+    type: console
+    with:
+      message: 'Driver Status: {{ steps.driver_status.output.response.message }}'
+
+  # =========================================================================
+  # PHASE 4: FRAUD & SAFETY CHECK (Shield Agent)
+  # =========================================================================
+
+  - name: safety_check
+    type: kibana.request
+    with:
+      method: POST
+      path: /api/agent_builder/converse
+      headers:
+        kbn-xsrf: 'true'
+      body:
+        agent_id: '2'
+        connector_id: 'Google-Gemini-2-5-Flash'
+        input: >
+          Quick safety check for the last 24 hours:
+          1. Any new fraud alerts or suspicious activity
+          2. Platform cancellation rate
+          3. Any flagged users or devices
+          Be concise, just key findings. Say "All clear" if nothing unusual.
+    timeout: 120s
+
+  - name: log_safety
+    type: console
+    with:
+      message: 'Safety Check: {{ steps.safety_check.output.response.message }}'
+
+  # =========================================================================
+  # PHASE 5: SEND EMAIL REPORT
+  # =========================================================================
+
+  - name: send_daily_email
+    type: email
+    connector-id: "e6fbf5ac-c28b-4b9d-833d-c518a3ca97eb"
+    with:
+      to:
+        - "fouad.abt@gmail.com"
+      subject: "Awhar Daily Report"
+      message: |
+        AWHAR DAILY ACTIVITY REPORT
+        ============================
+
+        ORDERS & REVENUE
+        {{ steps.daily_orders.output.response.message }}
+
+        USER ACTIVITY
+        {{ steps.user_activity.output.response.message }}
+
+        DRIVER & SUPPLY STATUS
+        {{ steps.driver_status.output.response.message }}
+
+        SAFETY & FRAUD CHECK
+        {{ steps.safety_check.output.response.message }}
+
+        ---
+        This report was auto-generated by Awhar AI agents.
+        Agents used: Strategist, Pulse, Shield
+        Powered by Elastic Agent Builder + Workflows
+
+  - name: log_complete
+    type: console
+    with:
+      message: 'Daily Activity Report sent via email.'

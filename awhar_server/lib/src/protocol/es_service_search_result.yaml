@@ -1,0 +1,6 @@
+# Service Search Response
+class: EsServiceSearchResult
+fields:
+  total: int
+  took: int
+  hits: List<EsServiceHit>

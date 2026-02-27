@@ -1,0 +1,64 @@
+### Promo Banner System ###
+# Used for displaying promotional banners on home screens
+# Manageable from admin panel
+
+class: Promo
+table: promos
+fields:
+  # Multilingual titles
+  titleEn: String
+  titleAr: String?
+  titleFr: String?
+  titleEs: String?
+  
+  # Multilingual descriptions
+  descriptionEn: String?
+  descriptionAr: String?
+  descriptionFr: String?
+  descriptionEs: String?
+  
+  # Banner image URL
+  imageUrl: String
+  
+  # Target audience - which user roles can see this promo
+  # Stored as comma-separated: "client,driver,store" or single role
+  targetRoles: String
+  
+  # Action when tapped
+  # Types: 'none', 'link', 'screen', 'store', 'driver', 'service'
+  actionType: String, default='none'
+  
+  # Action URL or identifier
+  # For 'link': external URL
+  # For 'screen': route name
+  # For 'store': store ID
+  # For 'driver': driver user ID
+  # For 'service': service ID
+  actionValue: String?
+  
+  # Display priority (higher = shown first)
+  priority: int, default=0
+  
+  # Status
+  isActive: bool, default=true
+  
+  # Scheduling
+  startDate: DateTime?
+  endDate: DateTime?
+  
+  # Analytics
+  viewCount: int, default=0
+  clickCount: int, default=0
+  
+  # Metadata
+  createdAt: DateTime
+  updatedAt: DateTime?
+  createdBy: int?  # Admin user ID who created it
+
+indexes:
+  promo_active_idx:
+    fields: isActive
+  promo_dates_idx:
+    fields: startDate, endDate
+  promo_priority_idx:
+    fields: priority

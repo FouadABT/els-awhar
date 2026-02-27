@@ -1,0 +1,10 @@
+## Request status enumeration for tracking service request lifecycle
+enum: RequestStatus
+values:
+  - pending          # Request created, waiting for driver
+  - driver_proposed  # Driver proposed to take request, awaiting client approval
+  - accepted         # Client accepted driver, driver assigned
+  - driver_arriving  # Driver en route to pickup location
+  - in_progress      # Service started (client picked up or delivery in transit)
+  - completed        # Service successfully completed
+  - cancelled        # Request cancelled by client or driver

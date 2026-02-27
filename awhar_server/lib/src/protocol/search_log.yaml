@@ -1,0 +1,31 @@
+### Analytics & Insights ###
+
+class: SearchLog
+table: search_logs
+fields:
+  # User (nullable for anonymous searches)
+  userId: int?, relation(parent=users)
+  
+  # Search Details
+  searchText: String
+  cityId: int?, relation(parent=cities)
+  categoryId: int?, relation(parent=categories)
+  
+  # Results
+  resultsCount: int, default=0
+  clickedDriverId: int?, relation(parent=driver_profiles)
+  
+  # Metadata
+  sessionId: String?
+  deviceType: String?  # ios, android, web
+  
+  # Timestamp
+  createdAt: DateTime, default=now
+
+indexes:
+  search_userId_idx:
+    fields: userId
+  search_cityId_idx:
+    fields: cityId
+  search_createdAt_idx:
+    fields: createdAt

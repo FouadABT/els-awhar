@@ -1,0 +1,6 @@
+enum: CancellerType
+serialized: byIndex
+values:
+  - client
+  - driver
+  - admin

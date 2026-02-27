@@ -1,0 +1,40 @@
+# Agent Stream Status
+#
+# Response from polling the agent streaming session.
+# Flutter calls pollAgentStream() every 500ms and receives
+# all events collected so far, plus the session status.
+#
+# Flow:
+# 1. Flutter calls startAgentConverse() → gets sessionId
+# 2. Flutter polls pollAgentStream(sessionId) every 500ms
+# 3. Each poll returns new events + status
+# 4. When status == 'complete', final response is included
+# 5. Flutter stops polling and displays final state
+class: AgentStreamStatus
+fields:
+  ## Unique session identifier
+  sessionId: String
+
+  ## Current status: 'processing', 'complete', 'error'
+  status: String
+
+  ## All events collected so far (client tracks which it has displayed)
+  events: List<AgentStreamEvent>
+
+  ## Conversation ID (set once received from Kibana)
+  conversationId: String?
+
+  ## Final agent response message (set when status == 'complete')
+  finalMessage: String?
+
+  ## Parsed tool steps (set when status == 'complete')
+  steps: List<AgentBuilderStep>?
+
+  ## Error message if status == 'error'
+  errorMessage: String?
+
+  ## Total processing time in ms (set when complete)
+  processingTimeMs: int?
+
+  ## Agent ID
+  agentId: String?

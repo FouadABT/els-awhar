@@ -1,0 +1,51 @@
+{
+  "rules": {
+    "chats": {
+      ".read": "auth != null",
+      ".write": "auth != null",
+      "$requestId": {
+        "messages": {
+          ".indexOn": ["timestamp"]
+        }
+      }
+    },
+    "direct_chats": {
+      ".read": "auth != null",
+      ".write": "auth != null",
+      ".indexOn": ["driverId", "clientId"],
+      "$chatId": {
+        "messages": {
+          ".indexOn": ["timestamp"]
+        }
+      }
+    },
+    "driver_locations": {
+      ".read": "auth != null",
+      ".write": "auth != null",
+      "$driverId": {
+        ".indexOn": ["timestamp"]
+      }
+    },
+    "presence": {
+      "users": {
+        ".read": "auth != null",
+        "$userId": {
+          ".write": "auth != null"
+        }
+      },
+      "drivers": {
+        ".read": "auth != null",
+        "$driverId": {
+          ".write": "auth != null"
+        }
+      }
+    },
+    "active_requests": {
+      ".read": "auth != null",
+      "$requestId": {
+        ".write": "auth != null",
+        ".indexOn": ["clientId", "driverId", "status", "timestamp"]
+      }
+    }
+  }
+}

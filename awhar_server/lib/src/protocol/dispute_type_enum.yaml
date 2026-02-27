@@ -1,0 +1,9 @@
+enum: DisputeType
+serialized: byIndex
+values:
+  - late_arrival
+  - service_quality
+  - payment_issue
+  - behavior_issue
+  - damaged_item
+  - other

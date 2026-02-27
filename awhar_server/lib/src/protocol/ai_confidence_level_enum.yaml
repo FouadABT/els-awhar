@@ -1,0 +1,8 @@
+# AI Confidence Level Enum
+enum: AiConfidenceLevel
+values:
+  - veryHigh
+  - high
+  - medium
+  - low
+  - veryLow

@@ -1,0 +1,4 @@
+# Popular Services Response
+class: EsPopularServicesResult
+fields:
+  services: List<EsPopularService>

@@ -1,0 +1,14 @@
+# Product Search Hit
+class: EsProductHit
+fields:
+  id: int
+  storeId: int?
+  storeName: String?
+  storeLogoUrl: String?
+  name: String?
+  description: String?
+  price: double?
+  imageUrl: String?
+  categoryName: String?
+  isAvailable: bool
+  score: double?

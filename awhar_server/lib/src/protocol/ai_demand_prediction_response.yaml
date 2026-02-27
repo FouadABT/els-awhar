@@ -1,0 +1,12 @@
+# AI Demand Prediction Response
+class: AiDemandPredictionResponse
+fields:
+  agentType: AiAgentType
+  status: AiResponseStatus
+  errorMessage: String?
+  processingTimeMs: int
+  timestamp: DateTime
+  hotspots: List<AiDemandHotspot>
+  predictionHorizonHours: int
+  overallDemandLevel: String
+  recommendations: List<String>

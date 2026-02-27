@@ -1,0 +1,22 @@
+### User Notifications ###
+
+class: UserNotification
+table: user_notifications
+fields:
+  userId: int, relation(parent=users)
+  
+  # Notification details
+  title: String
+  body: String
+  type: NotificationType
+  
+  # Related entities
+  relatedEntityId: int?
+  relatedEntityType: String?
+  
+  # Metadata (JSON)
+  dataJson: String?
+  
+  # Status
+  isRead: bool, default=false
+  readAt: DateTime?

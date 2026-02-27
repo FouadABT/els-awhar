@@ -1,0 +1,26 @@
+class: MediaMetadata
+table: media_metadata
+fields:
+  # Core identifiers
+  messageId: String
+  userId: int, relation(parent=users, onDelete=cascade)
+  requestId: int, relation(parent=service_requests, onDelete=cascade)
+  
+  # Media storage information
+  mediaUrl: String  # Firebase Cloud Storage URL
+  mediaType: String  # 'image', 'audio', 'video'
+  fileName: String  # Original filename
+  fileSizeBytes: int  # File size in bytes
+  
+  # Media-specific metadata
+  durationMs: int?  # Duration in milliseconds for audio/video
+  thumbnailUrl: String?  # Thumbnail URL for images/videos
+  
+  # Analytics
+  downloadCount: int, default=0  # Track downloads
+  lastAccessedAt: DateTime?  # When file was last accessed
+  
+  # Timestamps
+  uploadedAt: DateTime
+  createdAt: DateTime
+  updatedAt: DateTime

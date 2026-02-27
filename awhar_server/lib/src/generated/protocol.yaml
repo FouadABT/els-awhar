@@ -1,0 +1,412 @@
+emailIdp:
+  - login:
+  - startRegistration:
+  - verifyRegistrationCode:
+  - finishRegistration:
+  - startPasswordReset:
+  - verifyPasswordResetCode:
+  - finishPasswordReset:
+jwtRefresh:
+  - refreshAccessToken:
+admin:
+  - login:
+  - loginWithPassword:
+  - changePassword:
+  - getAllAdmins:
+  - getAdmin:
+  - createAdmin:
+  - updateAdmin:
+  - resetAdminPassword:
+  - deleteAdmin:
+  - toggleAdminStatus:
+  - getProfile:
+  - updateProfile:
+  - getDashboardStats:
+  - getUserCount:
+  - listUsers:
+  - listDrivers:
+  - listStores:
+  - getStoreCount:
+  - activateStore:
+  - deactivateStore:
+  - deleteStore:
+  - suspendUser:
+  - unsuspendUser:
+  - banUser:
+  - deleteUser:
+  - verifyDriver:
+  - createAdminUser:
+  - getDriverCount:
+  - unverifyDriver:
+  - suspendDriver:
+  - deleteDriver:
+  - getOrderCount:
+  - listOrders:
+  - listRequests:
+  - getRequestCount:
+  - updateRequestStatus:
+  - listTransactions:
+  - listReports:
+  - resolveReport:
+  - getRecentActivities:
+  - dismissReport:
+agent:
+  - findBestDrivers:
+  - parseServiceRequest:
+  - predictDemand:
+  - searchHelp:
+  - converseWithAgent:
+  - startAgentConverse:
+  - pollAgentStream:
+  - getAgentStatus:
+  - processFullRequest:
+analytics:
+  - logEvent:
+  - logEvents:
+  - logBusinessEvent:
+  - getAnalyticsSummary:
+  - getRecentEvents:
+firebaseAuth:
+  - registerWithFirebase:
+  - loginWithFirebase:
+  - refreshToken:
+  - getCurrentUser:
+  - logout:
+  - checkEmailExists:
+  - checkPhoneExists:
+blockedUser:
+  - blockUser:
+  - unblockUser:
+  - getBlockedUsers:
+  - isUserBlocked:
+  - isBlockedByUser:
+chat:
+  - sendMessage:
+  - getMessages:
+  - getUnreadCount:
+  - markAsRead:
+  - markMessageAsRead:
+  - syncFromFirebase:
+  - getAdminChatHistory:
+  - notifyNewMessage:
+country:
+  - getActiveCountries:
+  - getCountryByCode:
+  - getDefaultCountry:
+  - getCurrencyInfo:
+  - formatPrice:
+  - initializeDefaultCountries:
+  - upsertCountry:
+  - updateExchangeRate:
+  - toggleCountryStatus:
+  - convertCurrency:
+deviceFingerprint:
+  - checkFingerprint:
+  - registerFingerprint:
+  - getFingerprintByHash:
+  - getFingerprintsForUser:
+  - blockFingerprint:
+  - unblockFingerprint:
+  - getHighRiskDevices:
+  - getMultiAccountDevices:
+  - reportPromoAbuse:
+driver:
+  - setOnlineStatus:
+  - updateLocation:
+  - getOnlineDrivers:
+  - getDriverServices:
+  - getDriverProfileByUserId:
+  - addDriverService:
+  - updateDriverService:
+  - deleteDriverService:
+  - toggleServiceAvailability:
+  - reorderDriverServices:
+  - uploadServiceImageFile:
+  - uploadServiceImage:
+  - getServiceImages:
+  - deleteServiceImage:
+  - autoOfflineDrivers:
+  - isDriverTrulyOnline:
+driverStatus:
+  - setDriverStatus:
+  - getDriverStatus:
+  - getOnlineDriversCount:
+  - updateLastSeen:
+elasticsearch:
+  - testConnection:
+  - getHealth:
+  - checkIndex:
+  - getIndicesStatus:
+  - indexTestDocument:
+  - searchTestDocument:
+  - deleteTestDocument:
+  - getStatus:
+  - migrateAll:
+  - migrateDrivers:
+  - migrateServices:
+  - migrateDriverServices:
+  - migrateRequests:
+  - migrateStores:
+  - migrateProducts:
+  - migrateReviews:
+  - migrateStoreOrders:
+  - migrateTransactions:
+  - migrateUsers:
+  - migrateWallets:
+  - migrateRatings:
+  - getDocumentCounts:
+email:
+  - isEmailServiceReady:
+  - sendTestEmail:
+  - sendWelcomeEmail:
+  - sendOrderConfirmation:
+  - sendDriverAcceptedNotification:
+  - sendOrderCompletedEmail:
+  - sendCustomEmail:
+refreshJwtTokens:
+  - refreshAccessToken:
+location:
+  - updateDriverLocation:
+mcpProxy:
+  - proxyMcpRequest:
+media:
+  - ping:
+  - recordMedia:
+  - listByRequest:
+  - incrementDownload:
+notification:
+  - getUserNotifications:
+  - markAsRead:
+  - markAllAsRead:
+  - getUnreadCount:
+  - createNotification:
+notificationPlanner:
+  - getStatus:
+  - runCycle:
+  - dryRun:
+  - getHistory:
+  - getStats:
+  - updateConfig:
+  - sendCustomNotification:
+  - sendBroadcast:
+offer:
+  - sendOffer:
+  - counterOffer:
+  - acceptOffer:
+  - getOffersForOrder:
+  - withdrawOffer:
+order:
+  - createOrder:
+  - getActiveOrders:
+  - getNearbyOrders:
+  - cancelOrder:
+  - updateOrderStatus:
+promo:
+  - getActivePromos:
+  - recordView:
+  - recordClick:
+  - getAllPromos:
+  - getPromo:
+  - createPromo:
+  - updatePromo:
+  - togglePromoStatus:
+  - deletePromo:
+  - getPromoAnalytics:
+proposal:
+  - submitProposal:
+  - getProposalsForRequest:
+  - acceptProposal:
+  - rejectProposal:
+  - withdrawProposal:
+rating:
+  - submitRating:
+  - getUserRatings:
+  - getUserRatingStats:
+  - getRatingsGivenStats:
+  - getRatingForRequest:
+  - getRequestRatingStatus:
+report:
+  - createReportByUserId:
+  - createReport:
+  - getPendingReports:
+  - getReportsForUser:
+  - resolveReport:
+  - dismissReport:
+request:
+  - createRequest:
+  - getRequestById:
+  - getPriceSuggestion:
+  - getActiveRequestsForClient:
+  - getActiveRequestForClient:
+  - getActiveRequestForDriver:
+  - getActiveRequestsForDriver:
+  - getNearbyRequests:
+  - acceptRequest:
+  - approveDriver:
+  - rejectDriver:
+  - updateRequestStatus:
+  - cancelRequest:
+  - getClientRequestHistory:
+  - getDriverRequestHistory:
+  - getAllPendingRequests:
+  - getCatalogRequests:
+review:
+  - createClientReview:
+  - getClientReviews:
+  - getReviewsByDriver:
+  - createDriverReview:
+  - getDriverReviews:
+  - recalcDriverRating:
+search:
+  - searchDriversNearby:
+  - searchDriversByText:
+  - getTopRatedDrivers:
+  - searchServices:
+  - getPopularServices:
+  - searchDriverServices:
+  - getSimilarDriverServices:
+  - searchStoresNearby:
+  - searchProductsInStore:
+  - searchProductsNearby:
+  - getSearchSuggestions:
+  - getPopularSearches:
+  - getServiceCategoryCounts:
+  - getDriverServicePriceStats:
+  - unifiedSearch:
+  - smartSearch:
+  - searchKnowledgeBase:
+service:
+  - getCategories:
+  - getServicesByCategory:
+  - getDriversByCategory:
+  - getDriversByService:
+  - createCategory:
+  - updateCategory:
+  - searchDriversWithServices:
+  - getDriverCatalog:
+  - trackServiceView:
+  - trackServiceInquiry:
+  - trackServiceBooking:
+  - getServiceAnalytics:
+  - toggleFavorite:
+  - getFavoriteDrivers:
+  - isFavorite:
+  - getFavoriteDriverIds:
+settings:
+  - getSetting:
+  - getSettings:
+  - getAllSettings:
+  - setSetting:
+  - setSettings:
+  - deleteSetting:
+  - getAppConfiguration:
+  - initializeDefaultSettings:
+storeDelivery:
+  - getNearbyDrivers:
+  - requestDriver:
+  - postDeliveryRequest:
+  - getStoreDeliveryRequests:
+  - acceptStoreDelivery:
+  - rejectStoreDelivery:
+  - arrivedAtStore:
+  - pickedUp:
+  - arrivedAtClient:
+  - delivered:
+  - createOrderChat:
+  - getOrCreateOrderChat:
+  - sendChatMessage:
+  - getChatMessages:
+  - getChatParticipantsInfo:
+  - addDriverToChat:
+  - getDriverStoreOrders:
+  - getOrderDeliveryRequest:
+store:
+  - getStoreCategories:
+  - getStoreCategoryById:
+  - createStore:
+  - getMyStore:
+  - getStoreById:
+  - getStoreByUserId:
+  - updateStore:
+  - updateStoreLogo:
+  - updateStoreCoverImage:
+  - setWorkingHours:
+  - updateStoreExtendedProfile:
+  - updateStoreGallery:
+  - addGalleryImage:
+  - removeGalleryImage:
+  - toggleStoreOpen:
+  - toggleStoreActive:
+  - getNearbyStores:
+  - getStoresByCategory:
+  - searchStores:
+  - isWithinDeliveryZone:
+storeOrder:
+  - createOrder:
+  - getOrder:
+  - getOrderByNumber:
+  - getClientOrders:
+  - getClientActiveOrders:
+  - cancelOrder:
+  - getStoreOrders:
+  - getStorePendingOrders:
+  - confirmOrder:
+  - rejectOrder:
+  - markPreparing:
+  - markReady:
+  - assignDriver:
+  - driverArrivedAtStore:
+  - driverPickedUp:
+  - driverInDelivery:
+  - driverDelivered:
+  - getDriverStoreOrders:
+storeProduct:
+  - createProductCategory:
+  - getProductCategories:
+  - updateProductCategory:
+  - toggleCategoryActive:
+  - deleteProductCategory:
+  - addProduct:
+  - getProducts:
+  - getProductById:
+  - updateProduct:
+  - toggleProductAvailability:
+  - deleteProduct:
+  - reorderProducts:
+  - searchProducts:
+storeReview:
+  - createStoreReview:
+  - createDriverReviewForStoreOrder:
+  - getStoreReviews:
+  - getDriverStoreReviews:
+  - getReviewsForReviewee:
+  - getReviewsByClient:
+  - respondToReview:
+  - getStoreRatingStats:
+transaction:
+  - getPlatformCommissionRate:
+  - setPlatformCommissionRate:
+  - recordCashPayment:
+  - getTransactionHistory:
+  - getDriverEarnings:
+  - getWallet:
+  - confirmCashPayment:
+  - confirmCashPaymentByClient:
+trustScore:
+  - getClientTrustScore:
+  - getQuickTrustBadge:
+  - refreshTrustScore:
+  - batchComputeTrustScores:
+  - getPlatformTrustStats:
+user:
+  - updateProfile:
+  - updateFCMToken:
+  - clearFCMToken:
+  - fixPhotoUrls:
+  - uploadProfilePhoto:
+  - deleteAccount:
+  - getUserById:
+  - addRole:
+  - removeRole:
+greeting:
+  - hello:

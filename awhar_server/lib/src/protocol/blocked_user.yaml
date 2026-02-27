@@ -1,0 +1,25 @@
+### Blocked Users - Users can block other users ###
+
+class: BlockedUser
+table: blocked_users
+fields:
+  # The user who is blocking
+  userId: int, relation(parent=users, onDelete=cascade)
+  
+  # The user being blocked
+  blockedUserId: int, relation(parent=users, onDelete=cascade)
+  
+  # Reason for blocking (optional)
+  reason: String?
+  
+  # Timestamps
+  createdAt: DateTime, default=now
+
+indexes:
+  blocked_user_userId_idx:
+    fields: userId
+  blocked_user_blockedUserId_idx:
+    fields: blockedUserId
+  blocked_user_unique_idx:
+    fields: userId, blockedUserId
+    unique: true

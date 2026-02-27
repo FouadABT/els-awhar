@@ -1,0 +1,13 @@
+### DriverEarningsResponse
+### Response model for driver earnings data
+class: DriverEarningsResponse
+fields:
+  totalEarnings: double
+  totalCommission: double
+  totalGross: double
+  todayEarnings: double
+  weekEarnings: double
+  pendingEarnings: double
+  completedRides: int
+  activeRides: int
+  transactions: List<Transaction>

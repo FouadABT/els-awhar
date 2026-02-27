@@ -1,0 +1,26 @@
+### AppConfiguration
+### Structured app settings for mobile app initialization
+
+class: AppConfiguration
+fields:
+  ### Currency settings
+  currencyCode: String
+  currencySymbol: String
+  currencyName: String
+
+  ### Pricing settings
+  minPrice: double
+  commissionRate: double
+
+  ### App info
+  appName: String
+  supportEmail: String
+  supportPhone: String
+  termsUrl: String
+  privacyUrl: String
+
+  ### Upload settings
+  maxImageSizeMb: double
+
+  ### Localization
+  defaultLanguage: String

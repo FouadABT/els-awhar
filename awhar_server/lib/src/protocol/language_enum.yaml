@@ -1,0 +1,7 @@
+enum: Language
+serialized: byIndex
+values:
+  - en
+  - fr
+  - es
+  - ar

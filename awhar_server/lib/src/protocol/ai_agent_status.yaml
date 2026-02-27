@@ -1,0 +1,9 @@
+# AI Agent Status
+class: AiAgentStatus
+fields:
+  agentType: AiAgentType
+  isOnline: bool
+  lastInvocation: DateTime?
+  totalInvocations: int
+  successRate: double
+  averageResponseTimeMs: int

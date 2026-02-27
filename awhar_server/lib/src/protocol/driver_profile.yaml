@@ -1,0 +1,66 @@
+class: DriverProfile
+table: driver_profiles
+fields:
+  userId: int, relation(parent=users, onDelete=cascade)
+  
+  # Professional Info
+  displayName: String
+  bio: String?
+  profilePhotoUrl: String?
+  
+  # Vehicle Info
+  vehicleType: VehicleType?
+  vehicleMake: String?
+  vehicleModel: String?
+  vehiclePlate: String?
+  vehicleYear: int?
+  vehiclePhotoUrl: String?
+  
+  # Experience
+  experienceYears: int, default=0
+  
+  # Availability
+  availabilityStatus: DriverAvailabilityStatus?
+  baseCityId: int?, relation(parent=cities)
+  isOnline: bool, default=false
+  
+  # Location Tracking
+  lastLocationLat: double?
+  lastLocationLng: double?
+  lastLocationUpdatedAt: DateTime?
+  autoOfflineAt: DateTime?
+  
+  # Ratings
+  ratingAverage: double, default=0.0
+  ratingCount: int, default=0
+  
+  # Verification
+  isVerified: bool, default=false
+  isDocumentsSubmitted: bool, default=false
+  isFeatured: bool, default=false
+  
+  # Subscription
+  isPremium: bool, default=false
+  premiumUntil: DateTime?
+  
+  # Stats
+  totalCompletedOrders: int, default=0
+  totalEarnings: double, default=0.0
+  
+  # Timestamps
+  createdAt: DateTime, default=now
+  updatedAt: DateTime, default=now
+  verifiedAt: DateTime?
+
+indexes:
+  driver_userId_idx:
+    fields: userId
+    unique: true
+  driver_ratingAverage_idx:
+    fields: ratingAverage
+  driver_isFeatured_idx:
+    fields: isFeatured
+  driver_availabilityStatus_idx:
+    fields: availabilityStatus
+  driver_baseCityId_idx:
+    fields: baseCityId

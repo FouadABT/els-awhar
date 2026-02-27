@@ -1,0 +1,6 @@
+# Driver Service Search Response
+class: EsDriverServiceSearchResult
+fields:
+  total: int
+  took: int
+  hits: List<EsDriverServiceHit>

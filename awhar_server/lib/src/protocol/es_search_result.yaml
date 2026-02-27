@@ -1,0 +1,9 @@
+# Elasticsearch Search Result
+# Generic response wrapper for ES search results
+class: EsSearchResult
+fields:
+  total: int
+  took: int
+  timedOut: bool
+  hitsJson: String
+  aggregationsJson: String?

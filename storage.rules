@@ -1,0 +1,89 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    
+    // ═══════════════════════════════════════════════════════════════════════════
+    // HELPER FUNCTIONS
+    // ═══════════════════════════════════════════════════════════════════════════
+    
+    // Check if user is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    // Check file size
+    function isValidSize(maxSizeMB) {
+      return request.resource.size < maxSizeMB * 1024 * 1024;
+    }
+    
+    // Check file types
+    function isImage() {
+      return request.resource.contentType.matches('image/.*');
+    }
+    
+    function isAudio() {
+      return request.resource.contentType.matches('audio/.*');
+    }
+    
+    function isVideo() {
+      return request.resource.contentType.matches('video/.*');
+    }
+    
+    // ═══════════════════════════════════════════════════════════════════════════
+    // CHAT MEDIA: chats/{requestId}/{type}/{fileName}
+    // ═══════════════════════════════════════════════════════════════════════════
+    
+    match /chats/{requestId}/{fileType}/{fileName} {
+      
+      // Images: Max 5MB
+      allow write: if isAuthenticated() 
+                   && fileType == 'images' 
+                   && isImage() 
+                   && isValidSize(5);
+      
+      // Audio: Max 10MB
+      allow write: if isAuthenticated() 
+                   && fileType == 'audio' 
+                   && isAudio() 
+                   && isValidSize(10);
+      
+      // Videos: Max 50MB
+      allow write: if isAuthenticated() 
+                   && fileType == 'videos' 
+                   && isVideo() 
+                   && isValidSize(50);
+      
+      // Allow read for authenticated users
+      allow read: if isAuthenticated();
+      
+      // Allow delete for authenticated users
+      allow delete: if isAuthenticated();
+    }
+    
+    // ═══════════════════════════════════════════════════════════════════════════
+    // STORE MEDIA: stores/{storeId}/{type}/{fileName}
+    // ═══════════════════════════════════════════════════════════════════════════
+    
+    match /stores/{storeId}/{allPaths=**} {
+      // Allow store owners to upload images (logo, cover, gallery)
+      // Max 10MB for store images
+      allow write: if isAuthenticated() 
+                   && isImage() 
+                   && isValidSize(10);
+      
+      // Anyone can read store media (public)
+      allow read: if true;
+      
+      // Only authenticated users (store owners) can delete
+      allow delete: if isAuthenticated();
+    }
+    
+    // ═══════════════════════════════════════════════════════════════════════════
+    // DENY ALL OTHER PATHS
+    // ═══════════════════════════════════════════════════════════════════════════
+    
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

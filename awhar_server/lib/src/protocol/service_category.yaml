@@ -1,0 +1,32 @@
+class: ServiceCategory
+table: service_categories
+fields:
+  # Naming
+  name: String
+  nameAr: String
+  nameFr: String
+  nameEs: String?
+  
+  # Display
+  icon: String
+  description: String?
+  displayOrder: int, default=0
+  
+  # Settings
+  isActive: bool, default=true
+  
+  # Default radius for order broadcasts (in km)
+  defaultRadiusKm: double, default=10.0
+  
+  # Timestamps
+  createdAt: DateTime, default=now
+  updatedAt: DateTime, default=now
+
+indexes:
+  service_category_name_idx:
+    fields: name
+    unique: true
+  service_category_isActive_idx:
+    fields: isActive
+  service_category_displayOrder_idx:
+    fields: displayOrder

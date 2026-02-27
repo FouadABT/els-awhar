@@ -1,0 +1,143 @@
+$esUrl = "https://my-elasticsearch-project-d5a097.es.europe-west1.gcp.elastic.cloud:443"
+$apiKey = "aTkyUkpwd0JwZVo0dzVKdXpDSHY6YldZZ2tLVEMwSExjLVhqNjBJSW9odw=="
+$headers = @{ "Authorization" = "ApiKey $apiKey"; "Content-Type" = "application/json" }
+$now = (Get-Date).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ss.fffZ")
+
+$bulk = ""
+
+# ===== ARABIC translations of existing 10 docs =====
+
+# faq-001-ar
+$bulk += '{"index":{"_index":"awhar-knowledge-base","_id":"faq-001-ar"}}' + "`n"
+$bulk += (@{docId="faq-001-ar";title="كيفية طلب خدمة التوصيل";content="لطلب خدمة توصيل على أوهار، افتح التطبيق واضغط على 'طلب جديد'. اختر نوع الخدمة (توصيل طرود، توصيل طعام، أو مساعدة في النقل). أدخل موقع الاستلام والتوصيل، أضف أي تعليمات خاصة، وحدد ميزانيتك. سيتلقى السائقون المتاحون بالقرب منك طلبك ويرسلون عروضهم. يمكنك مقارنة تقييمات السائقين وأسعارهم ومراجعاتهم قبل قبول عرض.";category="orders";language="ar";tags=@("delivery","how-to","getting-started");createdAt=$now;updatedAt=$now} | ConvertTo-Json -Compress) + "`n"
+
+# faq-002-ar
+$bulk += '{"index":{"_index":"awhar-knowledge-base","_id":"faq-002-ar"}}' + "`n"
+$bulk += (@{docId="faq-002-ar";title="طرق الدفع والدفع عند الاستلام";content="يدعم أوهار الدفع عند الاستلام كوسيلة دفع رئيسية في المغرب. عند اكتمال التوصيل، تدفع للسائق مباشرة نقداً. يتم تحديد السعر المتفق عليه قبل بدء الرحلة، لذلك لا توجد مفاجآت. نعمل على إضافة خيارات الدفع بالبطاقة والمحفظة الإلكترونية في المستقبل. يتم تتبع جميع المعاملات في سجل طلباتك للشفافية.";category="payments";language="ar";tags=@("payment","cod","cash");createdAt=$now;updatedAt=$now} | ConvertTo-Json -Compress) + "`n"
+
+# faq-003-ar
+$bulk += '{"index":{"_index":"awhar-knowledge-base","_id":"faq-003-ar"}}' + "`n"
+$bulk += (@{docId="faq-003-ar";title="كيف يعمل نظام تقييم السائقين";content="بعد كل طلب مكتمل، يمكن للعملاء والسائقين تقييم بعضهم البعض من 1 إلى 5 نجوم. يتم حساب متوسط التقييمات على جميع الطلبات المكتملة. السائقون ذوو التقييمات الأعلى يظهرون أولاً في نتائج البحث. يمكنك أيضاً كتابة مراجعات لمساعدة المستخدمين الآخرين في اتخاذ قرارات مدروسة. قد يتم إيقاف السائقين ذوي التقييمات المنخفضة باستمرار مؤقتاً من المنصة.";category="drivers";language="ar";tags=@("ratings","reviews","trust");createdAt=$now;updatedAt=$now} | ConvertTo-Json -Compress) + "`n"
+
+# faq-004-ar
+$bulk += '{"index":{"_index":"awhar-knowledge-base","_id":"faq-004-ar"}}' + "`n"
+$bulk += (@{docId="faq-004-ar";title="الطلب من المتاجر وتوصيل المنتجات";content="تصفح المتاجر على أوهار للعثور على المحلات والمطاعم والأعمال التجارية المحلية. يمكنك البحث عن منتجات محددة أو التصفح حسب الفئة. أضف العناصر إلى سلة التسوق، اختر التوصيل أو الاستلام، وقدم طلبك. سيتم مطابقة سائق لاستلام وتوصيل طلبك. تتبع طلبك في الوقت الفعلي من التحضير حتى التوصيل إلى بابك.";category="stores";language="ar";tags=@("stores","shopping","products");createdAt=$now;updatedAt=$now} | ConvertTo-Json -Compress) + "`n"
+
+# faq-005-ar
+$bulk += '{"index":{"_index":"awhar-knowledge-base","_id":"faq-005-ar"}}' + "`n"
+$bulk += (@{docId="faq-005-ar";title="كيف تصبح سائقاً في أوهار";content="لتصبح سائقاً في أوهار، حمّل التطبيق وسجّل برقم هاتفك. أكمل ملفك الشخصي كسائق بمعلومات مركبتك وصورة الهوية ورخصة القيادة. اختر فئات الخدمات التي تريد تقديمها (توصيل، نقل، انتقال، إلخ). بمجرد التحقق، يمكنك الاتصال بالإنترنت والبدء في تلقي طلبات الخدمة من العملاء في منطقتك. حدد أسعارك وتوفرك بنفسك.";category="drivers";language="ar";tags=@("driver","registration","onboarding");createdAt=$now;updatedAt=$now} | ConvertTo-Json -Compress) + "`n"
+
+# faq-006-ar
+$bulk += '{"index":{"_index":"awhar-knowledge-base","_id":"faq-006-ar"}}' + "`n"
+$bulk += (@{docId="faq-006-ar";title="سياسة الإلغاء";content="يمكنك إلغاء طلب الخدمة قبل قبول السائق له دون أي رسوم. بمجرد قبول السائق وبدء الطريق، قد يؤثر الإلغاء على تقييم حسابك. السائقون الذين يلغون الطلبات المقبولة بشكل متكرر قد يواجهون عقوبات. إذا ألغى السائق عليك، يتم إعادة فتح الطلب تلقائياً لسائقين آخرين. يتم مراقبة الإلغاءات المتكررة من أي طرف للحفاظ على جودة المنصة.";category="orders";language="ar";tags=@("cancellation","policy","orders");createdAt=$now;updatedAt=$now} | ConvertTo-Json -Compress) + "`n"
+
+# faq-007-ar
+$bulk += '{"index":{"_index":"awhar-knowledge-base","_id":"faq-007-ar"}}' + "`n"
+$bulk += (@{docId="faq-007-ar";title="مناطق الخدمة والمدن في المغرب";content="يعمل أوهار حالياً في المدن المغربية الكبرى بما في ذلك الدار البيضاء والرباط ومراكش وفاس وطنجة وأكادير ومكناس. نتوسع إلى المزيد من المدن بانتظام. يعتمد توفر الخدمة على وجود سائقين في منطقتك. قد تكون المناطق الريفية والضواحي محدودة التوفر. تحقق من التطبيق لمعرفة توفر السائقين في الوقت الفعلي في موقعك.";category="cities";language="ar";tags=@("cities","morocco","coverage");createdAt=$now;updatedAt=$now} | ConvertTo-Json -Compress) + "`n"
+
+# faq-008-ar
+$bulk += '{"index":{"_index":"awhar-knowledge-base","_id":"faq-008-ar"}}' + "`n"
+$bulk += (@{docId="faq-008-ar";title="أنواع الخدمات المتاحة";content="يقدم أوهار مجموعة واسعة من الخدمات المنظمة حسب الفئة: توصيل الطرود لإرسال الطرود والوثائق، توصيل الطعام والمطاعم للوجبات، التسوق وتوصيل البقالة، النقل ونقل الأثاث، التسوق الشخصي والمهمات، النقل من وإلى المطار، نقل الحيوانات الأليفة، توصيل الأدوية والصيدليات، وخدمات البريد السريع للوثائق والمستندات القانونية. لكل فئة سائقون متخصصون بمركبات مناسبة.";category="services";language="ar";tags=@("services","categories","types");createdAt=$now;updatedAt=$now} | ConvertTo-Json -Compress) + "`n"
+
+# faq-009-ar
+$bulk += '{"index":{"_index":"awhar-knowledge-base","_id":"faq-009-ar"}}' + "`n"
+$bulk += (@{docId="faq-009-ar";title="كيفية تتبع طلبك في الوقت الفعلي";content="بمجرد قبول السائق لطلبك وبدء الرحلة، يمكنك تتبع موقعه في الوقت الفعلي على الخريطة. ستتلقى إشعارات فورية للأحداث الرئيسية: قبول السائق، وصول السائق لنقطة الاستلام، التوصيل قيد التنفيذ، واكتمال التوصيل. يمكنك أيضاً التواصل مع السائق مباشرة عبر الدردشة أو المكالمة الهاتفية داخل التطبيق إذا لزم الأمر.";category="orders";language="ar";tags=@("tracking","real-time","notifications");createdAt=$now;updatedAt=$now} | ConvertTo-Json -Compress) + "`n"
+
+# faq-010-ar
+$bulk += '{"index":{"_index":"awhar-knowledge-base","_id":"faq-010-ar"}}' + "`n"
+$bulk += (@{docId="faq-010-ar";title="أمان الحساب والتحقق";content="حسابك في أوهار محمي بالتحقق من رقم الهاتف والتحقق الاختياري من البريد الإلكتروني. نستخدم مصادقة Firebase لتسجيل دخول آمن. لا تشارك بيانات حسابك مع أي شخص. فعّل تسجيل الدخول البيومتري لأمان إضافي. جميع البيانات الشخصية مشفرة ومخزنة بأمان. أبلغ عن أي نشاط مشبوه لفريق الدعم فوراً.";category="account";language="ar";tags=@("security","verification","account");createdAt=$now;updatedAt=$now} | ConvertTo-Json -Compress) + "`n"
+
+# ===== NEW English docs (additional topics) =====
+
+# faq-011 - Refunds
+$bulk += '{"index":{"_index":"awhar-knowledge-base","_id":"faq-011"}}' + "`n"
+$bulk += (@{docId="faq-011";title="How to get a refund";content="If your delivery was not completed or the items were damaged, you can request a refund through the app. Go to your order history, select the problematic order, and tap 'Report Issue'. Describe the problem and attach photos if possible. Our support team will review your case within 24 hours. Approved refunds are processed as credits to your Awhar wallet or returned via the original payment method.";category="payments";language="en";tags=@("refund","dispute","support");createdAt=$now;updatedAt=$now} | ConvertTo-Json -Compress) + "`n"
+
+# faq-011-ar
+$bulk += '{"index":{"_index":"awhar-knowledge-base","_id":"faq-011-ar"}}' + "`n"
+$bulk += (@{docId="faq-011-ar";title="كيفية استرجاع الأموال";content="إذا لم يتم إكمال التوصيل أو تضررت العناصر، يمكنك طلب استرجاع الأموال عبر التطبيق. اذهب إلى سجل الطلبات، اختر الطلب المشكل، واضغط على 'الإبلاغ عن مشكلة'. صف المشكلة وأرفق صوراً إن أمكن. سيراجع فريق الدعم حالتك خلال 24 ساعة. يتم معالجة المبالغ المسترجعة المعتمدة كرصيد في محفظة أوهار أو إعادتها عبر طريقة الدفع الأصلية.";category="payments";language="ar";tags=@("refund","dispute","support");createdAt=$now;updatedAt=$now} | ConvertTo-Json -Compress) + "`n"
+
+# faq-012 - Pricing
+$bulk += '{"index":{"_index":"awhar-knowledge-base","_id":"faq-012"}}' + "`n"
+$bulk += (@{docId="faq-012";title="How service pricing works";content="Service pricing on Awhar varies by type. Fixed-price services have a set cost shown upfront. Per-kilometer pricing calculates the total based on distance. Some services use hourly rates. Drivers can also set their own custom prices based on experience and demand. You always see the price before confirming a request. For store orders, product prices are set by the store, and a separate delivery fee is calculated based on distance.";category="services";language="en";tags=@("pricing","cost","fees");createdAt=$now;updatedAt=$now} | ConvertTo-Json -Compress) + "`n"
+
+# faq-012-ar
+$bulk += '{"index":{"_index":"awhar-knowledge-base","_id":"faq-012-ar"}}' + "`n"
+$bulk += (@{docId="faq-012-ar";title="كيف تعمل تسعيرة الخدمات";content="تختلف أسعار الخدمات في أوهار حسب النوع. الخدمات ذات السعر الثابت لها تكلفة محددة تظهر مسبقاً. التسعير بالكيلومتر يحسب الإجمالي بناءً على المسافة. بعض الخدمات تستخدم أسعاراً بالساعة. يمكن للسائقين أيضاً تحديد أسعارهم الخاصة بناءً على الخبرة والطلب. ترى دائماً السعر قبل تأكيد الطلب. لطلبات المتاجر، تحدد المتاجر أسعار المنتجات، ويتم حساب رسوم توصيل منفصلة بناءً على المسافة.";category="services";language="ar";tags=@("pricing","cost","fees");createdAt=$now;updatedAt=$now} | ConvertTo-Json -Compress) + "`n"
+
+# faq-013 - Negotiate
+$bulk += '{"index":{"_index":"awhar-knowledge-base","_id":"faq-013"}}' + "`n"
+$bulk += (@{docId="faq-013";title="Can I negotiate the price with a driver";content="Yes, Awhar supports price negotiation through the proposal system. When you create a request, you can set your preferred budget. Drivers will send proposals with their prices. You can accept, reject, or counter-offer. This transparent bidding system ensures fair pricing for both parties. Some services have fixed prices set by the platform that cannot be negotiated.";category="services";language="en";tags=@("negotiation","price","proposals");createdAt=$now;updatedAt=$now} | ConvertTo-Json -Compress) + "`n"
+
+# faq-013-ar
+$bulk += '{"index":{"_index":"awhar-knowledge-base","_id":"faq-013-ar"}}' + "`n"
+$bulk += (@{docId="faq-013-ar";title="هل يمكنني التفاوض على السعر مع السائق";content="نعم، يدعم أوهار التفاوض على الأسعار من خلال نظام العروض. عند إنشاء طلب، يمكنك تحديد ميزانيتك المفضلة. سيرسل السائقون عروضهم بأسعارهم. يمكنك القبول أو الرفض أو تقديم عرض مضاد. يضمن نظام المزايدة الشفاف هذا تسعيراً عادلاً لكلا الطرفين. بعض الخدمات لها أسعار ثابتة تحددها المنصة ولا يمكن التفاوض عليها.";category="services";language="ar";tags=@("negotiation","price","proposals");createdAt=$now;updatedAt=$now} | ConvertTo-Json -Compress) + "`n"
+
+# faq-014 - Vehicle types
+$bulk += '{"index":{"_index":"awhar-knowledge-base","_id":"faq-014"}}' + "`n"
+$bulk += (@{docId="faq-014";title="What vehicle types are available for delivery";content="Awhar drivers use various vehicle types depending on the service: motorcycles for fast food and small package delivery, cars for passenger transport and medium packages, vans for larger deliveries and furniture moving, and bicycles for eco-friendly short-distance delivery. When posting a request, you can specify the vehicle type needed, and only drivers with matching vehicles will see your request.";category="drivers";language="en";tags=@("vehicles","motorcycle","van","car");createdAt=$now;updatedAt=$now} | ConvertTo-Json -Compress) + "`n"
+
+# faq-014-ar
+$bulk += '{"index":{"_index":"awhar-knowledge-base","_id":"faq-014-ar"}}' + "`n"
+$bulk += (@{docId="faq-014-ar";title="ما هي أنواع المركبات المتاحة للتوصيل";content="يستخدم سائقو أوهار أنواعاً مختلفة من المركبات حسب الخدمة: الدراجات النارية لتوصيل الوجبات السريعة والطرود الصغيرة، السيارات لنقل الركاب والطرود المتوسطة، الشاحنات الصغيرة للتوصيلات الكبيرة ونقل الأثاث، والدراجات الهوائية للتوصيل الصديق للبيئة على مسافات قصيرة. عند نشر طلب، يمكنك تحديد نوع المركبة المطلوبة، ولن يرى طلبك إلا السائقون الذين يملكون مركبات مطابقة.";category="drivers";language="ar";tags=@("vehicles","motorcycle","van","car");createdAt=$now;updatedAt=$now} | ConvertTo-Json -Compress) + "`n"
+
+# faq-015 - Contact support
+$bulk += '{"index":{"_index":"awhar-knowledge-base","_id":"faq-015"}}' + "`n"
+$bulk += (@{docId="faq-015";title="How to contact Awhar support";content="You can contact Awhar support through multiple channels: In-app chat with our AI concierge agent for instant answers to common questions. For complex issues, the agent can escalate to a human support representative. You can also email us at support@awhar.ma or reach us on WhatsApp. Our support team is available daily from 8 AM to 10 PM Morocco time. For urgent issues during an active delivery, use the emergency button in the order tracking screen.";category="account";language="en";tags=@("support","contact","help");createdAt=$now;updatedAt=$now} | ConvertTo-Json -Compress) + "`n"
+
+# faq-015-ar
+$bulk += '{"index":{"_index":"awhar-knowledge-base","_id":"faq-015-ar"}}' + "`n"
+$bulk += (@{docId="faq-015-ar";title="كيفية التواصل مع دعم أوهار";content="يمكنك التواصل مع دعم أوهار عبر عدة قنوات: الدردشة داخل التطبيق مع وكيل الكونسيرج الذكي للحصول على إجابات فورية للأسئلة الشائعة. للمشاكل المعقدة، يمكن للوكيل تصعيدها لممثل دعم بشري. يمكنك أيضاً مراسلتنا عبر support@awhar.ma أو التواصل معنا عبر واتساب. فريق الدعم متاح يومياً من 8 صباحاً إلى 10 مساءً بتوقيت المغرب. للمشاكل العاجلة أثناء توصيل نشط، استخدم زر الطوارئ في شاشة تتبع الطلب.";category="account";language="ar";tags=@("support","contact","help");createdAt=$now;updatedAt=$now} | ConvertTo-Json -Compress) + "`n"
+
+# faq-016 - Minimum order
+$bulk += '{"index":{"_index":"awhar-knowledge-base","_id":"faq-016"}}' + "`n"
+$bulk += (@{docId="faq-016";title="Minimum order amount for store orders";content="Each store on Awhar can set its own minimum order amount. This is displayed on the store page before you start adding items. The minimum typically ranges from 20 to 100 MAD depending on the store type. If your cart total is below the minimum, you will need to add more items or choose a different store. Delivery fees are calculated separately and are not included in the minimum order amount.";category="stores";language="en";tags=@("minimum-order","stores","delivery-fee");createdAt=$now;updatedAt=$now} | ConvertTo-Json -Compress) + "`n"
+
+# faq-016-ar
+$bulk += '{"index":{"_index":"awhar-knowledge-base","_id":"faq-016-ar"}}' + "`n"
+$bulk += (@{docId="faq-016-ar";title="الحد الأدنى لطلبات المتاجر";content="يمكن لكل متجر على أوهار تحديد الحد الأدنى لمبلغ الطلب الخاص به. يظهر هذا على صفحة المتجر قبل البدء في إضافة العناصر. يتراوح الحد الأدنى عادة بين 20 و100 درهم حسب نوع المتجر. إذا كان إجمالي سلتك أقل من الحد الأدنى، ستحتاج إلى إضافة المزيد من العناصر أو اختيار متجر آخر. يتم حساب رسوم التوصيل بشكل منفصل ولا تُدرج في الحد الأدنى للطلب.";category="stores";language="ar";tags=@("minimum-order","stores","delivery-fee");createdAt=$now;updatedAt=$now} | ConvertTo-Json -Compress) + "`n"
+
+# faq-017 - Delete account
+$bulk += '{"index":{"_index":"awhar-knowledge-base","_id":"faq-017"}}' + "`n"
+$bulk += (@{docId="faq-017";title="How to delete your Awhar account";content="To delete your Awhar account, go to Settings and select Account and then Delete Account. You will need to confirm your identity with a verification code. Note that account deletion is permanent and cannot be reversed. All your order history, reviews, and wallet balance will be lost. If you have pending orders, you must complete or cancel them before deletion. Active driver accounts must first deactivate their driver profile. You can also request account deletion by contacting support.";category="account";language="en";tags=@("delete-account","privacy","settings");createdAt=$now;updatedAt=$now} | ConvertTo-Json -Compress) + "`n"
+
+# faq-017-ar
+$bulk += '{"index":{"_index":"awhar-knowledge-base","_id":"faq-017-ar"}}' + "`n"
+$bulk += (@{docId="faq-017-ar";title="كيفية حذف حسابك في أوهار";content="لحذف حسابك في أوهار، اذهب إلى الإعدادات واختر الحساب ثم حذف الحساب. ستحتاج لتأكيد هويتك برمز تحقق. لاحظ أن حذف الحساب دائم ولا يمكن التراجع عنه. سيتم فقدان جميع سجلات الطلبات والمراجعات ورصيد المحفظة. إذا كانت لديك طلبات معلقة، يجب إكمالها أو إلغاؤها قبل الحذف. يجب على حسابات السائقين النشطة إلغاء تنشيط ملف السائق أولاً. يمكنك أيضاً طلب حذف الحساب بالتواصل مع الدعم.";category="account";language="ar";tags=@("delete-account","privacy","settings");createdAt=$now;updatedAt=$now} | ConvertTo-Json -Compress) + "`n"
+
+# faq-018 - Delivery zones Casablanca
+$bulk += '{"index":{"_index":"awhar-knowledge-base","_id":"faq-018"}}' + "`n"
+$bulk += (@{docId="faq-018";title="Delivery zones in Casablanca";content="Awhar covers all major areas of Casablanca including Maarif, Ain Diab, Anfa, Gauthier, Racine, Bourgogne, Sidi Bernoussi, Hay Hassani, Ain Chock, Derb Sultan, and the city center. The largest driver concentration is in the central business district and Maarif area. Delivery to industrial zones like Ain Sebaa and Bernoussi is also available. Suburban areas like Bouskoura and Mohammedia may have longer wait times depending on driver availability.";category="cities";language="en";tags=@("casablanca","zones","coverage");createdAt=$now;updatedAt=$now} | ConvertTo-Json -Compress) + "`n"
+
+# faq-018-ar
+$bulk += '{"index":{"_index":"awhar-knowledge-base","_id":"faq-018-ar"}}' + "`n"
+$bulk += (@{docId="faq-018-ar";title="مناطق التوصيل في الدار البيضاء";content="يغطي أوهار جميع المناطق الرئيسية في الدار البيضاء بما في ذلك المعاريف وعين الذئاب وأنفا وغوتييه وراسين وبورغون وسيدي برنوصي وحي الحسني وعين الشق ودرب السلطان ووسط المدينة. أكبر تركيز للسائقين في منطقة الأعمال المركزية والمعاريف. التوصيل للمناطق الصناعية مثل عين السبع وبرنوصي متاح أيضاً. المناطق الضاحوية مثل بوسكورة والمحمدية قد تستغرق وقتاً أطول حسب توفر السائقين.";category="cities";language="ar";tags=@("casablanca","zones","coverage");createdAt=$now;updatedAt=$now} | ConvertTo-Json -Compress) + "`n"
+
+# faq-019 - Ghost orders
+$bulk += '{"index":{"_index":"awhar-knowledge-base","_id":"faq-019"}}' + "`n"
+$bulk += (@{docId="faq-019";title="What are ghost orders and platform policy";content="A ghost order occurs when a client creates a service request but repeatedly fails to accept any driver proposals, or cancels after a driver has been assigned. This wastes driver time and resources. Awhar monitors accounts for ghost order patterns. Clients with frequent ghost orders may receive warnings, temporary restrictions, or account suspension. If you accidentally created a request, please cancel it promptly rather than ignoring driver proposals. This helps maintain a healthy marketplace for everyone.";category="orders";language="en";tags=@("ghost-orders","fraud","policy");createdAt=$now;updatedAt=$now} | ConvertTo-Json -Compress) + "`n"
+
+# faq-019-ar
+$bulk += '{"index":{"_index":"awhar-knowledge-base","_id":"faq-019-ar"}}' + "`n"
+$bulk += (@{docId="faq-019-ar";title="ما هي الطلبات الوهمية وسياسة المنصة";content="يحدث الطلب الوهمي عندما ينشئ العميل طلب خدمة لكنه يرفض باستمرار قبول عروض السائقين، أو يلغي بعد تعيين سائق. هذا يهدر وقت السائقين ومواردهم. يراقب أوهار الحسابات لرصد أنماط الطلبات الوهمية. العملاء الذين لديهم طلبات وهمية متكررة قد يتلقون تحذيرات أو قيوداً مؤقتة أو تعليق الحساب. إذا أنشأت طلباً بالخطأ، يرجى إلغاؤه فوراً بدلاً من تجاهل عروض السائقين. هذا يساعد في الحفاظ على سوق صحي للجميع.";category="orders";language="ar";tags=@("ghost-orders","fraud","policy");createdAt=$now;updatedAt=$now} | ConvertTo-Json -Compress) + "`n"
+
+# faq-020 - Wallet
+$bulk += '{"index":{"_index":"awhar-knowledge-base","_id":"faq-020"}}' + "`n"
+$bulk += (@{docId="faq-020";title="How the Awhar wallet works";content="The Awhar wallet is a digital balance in your account used for transactions on the platform. Drivers receive earnings in their wallet after completing deliveries. Clients can receive refund credits to their wallet. Wallet balance can be used to pay for future orders when digital payments are enabled. Drivers can withdraw their wallet balance to their bank account. Check your wallet balance and transaction history anytime in the app under the Wallet section.";category="payments";language="en";tags=@("wallet","earnings","balance");createdAt=$now;updatedAt=$now} | ConvertTo-Json -Compress) + "`n"
+
+# faq-020-ar
+$bulk += '{"index":{"_index":"awhar-knowledge-base","_id":"faq-020-ar"}}' + "`n"
+$bulk += (@{docId="faq-020-ar";title="كيف تعمل محفظة أوهار";content="محفظة أوهار هي رصيد رقمي في حسابك يُستخدم للمعاملات على المنصة. يتلقى السائقون أرباحهم في محفظتهم بعد إتمام التوصيلات. يمكن للعملاء تلقي رصيد استرجاع في محفظتهم. يمكن استخدام رصيد المحفظة لدفع الطلبات المستقبلية عند تفعيل المدفوعات الرقمية. يمكن للسائقين سحب رصيد محفظتهم إلى حسابهم البنكي. تحقق من رصيد محفظتك وسجل المعاملات في أي وقت في التطبيق ضمن قسم المحفظة.";category="payments";language="ar";tags=@("wallet","earnings","balance");createdAt=$now;updatedAt=$now} | ConvertTo-Json -Compress) + "`n"
+
+Write-Host "Bulk payload size: $($bulk.Length) bytes"
+Write-Host "Sending to Elasticsearch..."
+
+$resp = Invoke-RestMethod -Uri "$esUrl/_bulk" -Headers $headers -Method POST -Body ([System.Text.Encoding]::UTF8.GetBytes($bulk)) -ContentType "application/json; charset=utf-8"
+Write-Host "Errors: $($resp.errors)"
+Write-Host "Items indexed: $($resp.items.Count)"
+
+if ($resp.errors) {
+    $resp.items | Where-Object { $_.index.error } | ForEach-Object {
+        Write-Host "ERROR: $($_.index._id) - $($_.index.error.reason)"
+    }
+}

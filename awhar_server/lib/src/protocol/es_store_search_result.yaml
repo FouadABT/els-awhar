@@ -1,0 +1,6 @@
+# Store Search Response
+class: EsStoreSearchResult
+fields:
+  total: int
+  took: int
+  hits: List<EsStoreHit>

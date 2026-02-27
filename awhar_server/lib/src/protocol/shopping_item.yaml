@@ -1,0 +1,6 @@
+## Shopping item for purchase requests
+class: ShoppingItem
+fields:
+  item: String
+  quantity: int, default=1
+  notes: String?

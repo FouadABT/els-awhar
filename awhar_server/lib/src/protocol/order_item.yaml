@@ -1,0 +1,7 @@
+### Order Item (for cart/order placement) ###
+
+class: OrderItem
+fields:
+  productId: int
+  quantity: int
+  notes: String?

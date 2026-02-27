@@ -1,0 +1,16 @@
+enum: OrderStatus
+serialized: byIndex
+values:
+  - pending
+  - negotiating
+  - accepted
+  - driver_en_route
+  - arrived
+  - in_progress
+  - completed
+  - rated
+  - expired
+  - cancelled_by_client
+  - cancelled_by_driver
+  - cancelled_by_admin
+  - disputed

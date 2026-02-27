@@ -1,0 +1,8 @@
+# AI Agent Response Status Enum
+enum: AiResponseStatus
+values:
+  - success
+  - partialSuccess
+  - noResults
+  - error
+  - timeout

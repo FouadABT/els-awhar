@@ -1,0 +1,26 @@
+# Agent Stream Event
+#
+# A single real-time event from the Kibana Agent Builder SSE stream.
+# Used in the polling-based streaming architecture to give Flutter
+# real-time visibility into the agent's reasoning process.
+#
+# Event types (from Kibana Agent Builder):
+# - reasoning: Agent thinking/planning text
+# - tool_call: Agent invokes a tool { tool_id, params }
+# - tool_progress: Tool execution progress { message }
+# - tool_result: Tool returns results { tool_call_id, results[] }
+# - message_chunk: Streaming answer text { text_chunk }
+# - message_complete: Final full answer { message_content }
+# - thinking_complete: Timing info { time_to_first_token }
+# - round_complete: Full round data with final response
+# - error: Error event
+class: AgentStreamEvent
+fields:
+  ## Event type: reasoning, tool_call, tool_result, message_chunk, etc.
+  type: String
+
+  ## JSON-encoded event payload
+  data: String
+
+  ## When this event was received
+  timestamp: DateTime

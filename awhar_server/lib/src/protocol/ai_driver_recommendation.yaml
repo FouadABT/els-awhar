@@ -1,0 +1,17 @@
+# AI Driver Recommendation
+class: AiDriverRecommendation
+fields:
+  driverId: int
+  userId: int
+  displayName: String?
+  profilePhotoUrl: String?
+  ratingAverage: double?
+  ratingCount: int?
+  distanceKm: double
+  isOnline: bool
+  isVerified: bool
+  isPremium: bool
+  totalCompletedOrders: int?
+  matchScore: double
+  confidence: AiConfidenceLevel
+  matchReasons: List<String>

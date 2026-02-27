@@ -1,0 +1,48 @@
+class: DriverService
+table: driver_services
+fields:
+  driverId: int, relation(parent=driver_profiles, onDelete=cascade)
+  serviceId: int, relation(parent=services, onDelete=cascade)
+  categoryId: int?, relation(parent=service_categories)
+  
+  # Custom Pricing
+  priceType: PriceType?
+  basePrice: double?
+  pricePerKm: double?
+  pricePerHour: double?
+  minPrice: double?
+  
+  # Service Details
+  title: String?
+  imageUrl: String?
+  description: String?
+  customDescription: String?
+  
+  # Analytics
+  viewCount: int, default=0
+  inquiryCount: int, default=0
+  bookingCount: int, default=0
+  
+  # Availability
+  isAvailable: bool, default=true
+  availableFrom: DateTime?
+  availableUntil: DateTime?
+  
+  # Settings
+  isActive: bool, default=true
+  displayOrder: int, default=0
+  
+  # Timestamps
+  createdAt: DateTime, default=now
+  updatedAt: DateTime, default=now
+
+indexes:
+  drv_svc_driverId_idx:
+    fields: driverId
+  drv_svc_serviceId_idx:
+    fields: serviceId
+  drv_svc_isActive_idx:
+    fields: isActive
+  drv_svc_driver_service_unique:
+    fields: driverId, serviceId
+    unique: true

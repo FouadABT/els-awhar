@@ -1,0 +1,5 @@
+# Service Category Counts Response
+class: EsServiceCategoryCountsResult
+fields:
+  categories: List<EsCategoryCount>
+  total: int

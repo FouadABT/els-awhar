@@ -1,0 +1,8 @@
+## Transaction status enumeration
+enum: TransactionStatus
+values:
+  - pending          # Transaction initiated but not completed
+  - completed        # Transaction completed successfully
+  - failed           # Transaction failed
+  - refunded         # Transaction was refunded
+  - cancelled        # Transaction was cancelled

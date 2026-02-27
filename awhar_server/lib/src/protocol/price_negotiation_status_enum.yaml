@@ -1,0 +1,9 @@
+enum: PriceNegotiationStatus
+serialized: byIndex
+values:
+  - waiting_for_offers
+  - offer_received
+  - client_countered
+  - driver_countered
+  - price_agreed
+  - negotiation_failed

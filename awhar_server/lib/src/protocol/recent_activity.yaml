@@ -1,0 +1,9 @@
+class: RecentActivity
+fields:
+  activityType: String
+  title: String
+  description: String
+  relatedId: int?
+  relatedType: String?
+  createdAt: DateTime
+  metadata: String?

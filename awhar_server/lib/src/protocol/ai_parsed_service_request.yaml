@@ -1,0 +1,16 @@
+# AI Parsed Service Request (from NLP)
+class: AiParsedServiceRequest
+fields:
+  originalText: String
+  detectedServices: List<String>
+  suggestedServiceIds: List<int>
+  detectedLocation: String?
+  suggestedLatitude: double?
+  suggestedLongitude: double?
+  detectedUrgency: String
+  isUrgent: bool
+  detectedScheduledTime: String?
+  suggestedScheduledTime: DateTime?
+  parsingConfidence: AiConfidenceLevel
+  clarificationNeeded: bool
+  clarificationQuestions: List<String>

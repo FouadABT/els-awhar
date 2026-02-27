@@ -1,0 +1,56 @@
+### Store Delivery Requests (Store searching for drivers) ###
+
+class: StoreDeliveryRequest
+table: store_delivery_requests
+fields:
+  # The order this delivery is for
+  storeOrderId: int, relation(parent=store_orders, onDelete=cascade)
+  
+  # Store making the request
+  storeId: int, relation(parent=stores)
+  
+  # Request Type
+  requestType: String  # 'public' (all nearby drivers) or 'direct' (specific driver)
+  
+  # Target driver (only for direct requests) - References DriverProfile.id
+  targetDriverId: int?, relation(parent=driver_profiles)
+  
+  # Delivery Details
+  pickupAddress: String
+  pickupLatitude: double
+  pickupLongitude: double
+  deliveryAddress: String
+  deliveryLatitude: double
+  deliveryLongitude: double
+  distanceKm: double?
+  
+  # Earnings
+  deliveryFee: double
+  driverEarnings: double  # After commission
+  
+  # Status
+  status: String, default='pending'  # 'pending', 'accepted', 'rejected', 'expired', 'cancelled'
+  
+  # Assigned Driver (when accepted) - References User.id
+  assignedDriverId: int?, relation(parent=users)
+  
+  # Expiry (for public requests)
+  expiresAt: DateTime?
+  
+  # Timestamps
+  createdAt: DateTime, default=now
+  acceptedAt: DateTime?
+  rejectedAt: DateTime?
+
+indexes:
+  store_del_req_orderId_idx:
+    fields: storeOrderId
+    unique: true
+  store_del_req_storeId_idx:
+    fields: storeId
+  store_del_req_status_idx:
+    fields: status
+  store_del_req_targetDriverId_idx:
+    fields: targetDriverId
+  store_del_req_location_idx:
+    fields: pickupLatitude, pickupLongitude

@@ -1,0 +1,7 @@
+enum: UserRole
+serialized: byIndex
+values:
+  - client
+  - driver
+  - store
+  - admin

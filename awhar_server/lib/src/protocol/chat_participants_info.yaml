@@ -1,0 +1,16 @@
+### Chat Participants Info
+### Contains information about all participants in a store order chat
+class: ChatParticipantsInfo
+fields:
+  ### Client ID
+  clientId: int
+  ### Client name (user's full name)
+  clientName: String
+  ### Store ID
+  storeId: int
+  ### Store name
+  storeName: String
+  ### Driver ID (null if not assigned)
+  driverId: int?
+  ### Driver name (null if not assigned)
+  driverName: String?

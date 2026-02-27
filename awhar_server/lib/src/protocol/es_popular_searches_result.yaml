@@ -1,0 +1,4 @@
+# Popular Searches Response
+class: EsPopularSearchesResult
+fields:
+  searches: List<EsPopularSearchTerm>

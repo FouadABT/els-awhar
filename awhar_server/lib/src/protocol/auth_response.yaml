@@ -1,0 +1,17 @@
+### Authentication Response Model ###
+
+class: AuthResponse
+fields:
+  success: bool
+  message: String
+  
+  # User data (returned on successful login/register)
+  user: User?
+  
+  # JWT Tokens (Serverpod JWT format)
+  accessToken: String?
+  refreshToken: String?
+  
+  # Flags (nullable to handle defaults properly in serialization)
+  requiresRegistration: bool?, default=false
+  requiresVerification: bool?, default=false

@@ -1,0 +1,33 @@
+### Store Order Chat - 3-way chat between Client, Store, and Driver ###
+
+class: StoreOrderChat
+table: store_order_chats
+fields:
+  # Order Reference
+  storeOrderId: int, relation(parent=store_orders, onDelete=cascade)
+  
+  # Participants
+  clientId: int, relation(parent=users)
+  storeId: int, relation(parent=stores)
+  driverId: int?, relation(parent=users)  # May not have driver initially
+  
+  # Firebase channel ID for realtime sync
+  firebaseChannelId: String?
+  
+  # Status
+  isActive: bool, default=true
+  
+  # Timestamps
+  createdAt: DateTime, default=now
+  updatedAt: DateTime, default=now
+
+indexes:
+  store_order_chat_orderId_idx:
+    fields: storeOrderId
+    unique: true
+  store_order_chat_clientId_idx:
+    fields: clientId
+  store_order_chat_storeId_idx:
+    fields: storeId
+  store_order_chat_driverId_idx:
+    fields: driverId

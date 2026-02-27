@@ -1,0 +1,15 @@
+### AdminLoginResponse
+### Response for admin login attempt
+
+class: AdminLoginResponse
+fields:
+  success: bool
+  message: String
+  token: String?
+  expiresAt: DateTime?
+  adminId: int?
+  adminEmail: String?
+  adminName: String?
+  adminPhotoUrl: String?
+  adminRole: String?
+  adminPermissions: List<String>?

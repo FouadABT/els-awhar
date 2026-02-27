@@ -1,0 +1,31 @@
+class: Subscription
+table: subscriptions
+fields:
+  driverId: int, relation(parent=driver_profiles, onDelete=cascade)
+  planId: int, relation(parent=subscription_plans)
+  
+  # Period
+  startDate: DateTime
+  endDate: DateTime
+  
+  # Status
+  status: SubscriptionStatus?
+  
+  # Auto-renewal
+  autoRenew: bool, default=false
+  
+  # Cancellation
+  cancelledAt: DateTime?
+  cancellationReason: String?
+  
+  # Timestamps
+  createdAt: DateTime, default=now
+  updatedAt: DateTime, default=now
+
+indexes:
+  sub_driverId_idx:
+    fields: driverId
+  sub_status_idx:
+    fields: status
+  sub_endDate_idx:
+    fields: endDate

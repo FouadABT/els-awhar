@@ -1,0 +1,27 @@
+### Product Categories (Store-defined categories like Pizza, Drinks, etc.) ###
+
+class: ProductCategory
+table: product_categories
+fields:
+  # Store that owns this category
+  storeId: int, relation(parent=stores, onDelete=cascade)
+  
+  # Name (single language - store defines)
+  name: String
+  
+  # Visual
+  imageUrl: String?
+  
+  # Settings
+  isActive: bool, default=true
+  displayOrder: int, default=0
+  
+  # Timestamps
+  createdAt: DateTime, default=now
+  updatedAt: DateTime, default=now
+
+indexes:
+  prod_cat_storeId_idx:
+    fields: storeId
+  prod_cat_displayOrder_idx:
+    fields: storeId, displayOrder

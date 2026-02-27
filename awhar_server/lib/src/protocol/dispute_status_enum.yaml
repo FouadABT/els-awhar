@@ -1,0 +1,8 @@
+enum: DisputeStatus
+serialized: byIndex
+values:
+  - open
+  - under_review
+  - resolved
+  - rejected
+  - escalated

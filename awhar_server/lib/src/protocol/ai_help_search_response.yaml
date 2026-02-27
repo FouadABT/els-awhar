@@ -1,0 +1,12 @@
+# AI Help Search Response - ELSER-powered knowledge base search
+class: AiHelpSearchResponse
+fields:
+  agentType: AiAgentType
+  status: AiResponseStatus
+  errorMessage: String?
+  processingTimeMs: int
+  timestamp: DateTime
+  question: String
+  articles: List<AiHelpArticle>
+  summary: String
+  topCategory: String?

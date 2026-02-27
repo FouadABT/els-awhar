@@ -1,0 +1,11 @@
+# AI Driver Matching Response
+class: AiDriverMatchingResponse
+fields:
+  agentType: AiAgentType
+  status: AiResponseStatus
+  errorMessage: String?
+  processingTimeMs: int
+  timestamp: DateTime
+  recommendations: List<AiDriverRecommendation>
+  explanation: String
+  totalCandidatesEvaluated: int

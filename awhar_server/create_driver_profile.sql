@@ -1,0 +1,31 @@
+INSERT INTO driver_profiles (
+  "userId", 
+  "displayName", 
+  "experienceYears", 
+  "ratingAverage", 
+  "ratingCount", 
+  "isVerified", 
+  "isDocumentsSubmitted", 
+  "isFeatured", 
+  "isPremium", 
+  "totalCompletedOrders", 
+  "totalEarnings", 
+  "createdAt", 
+  "updatedAt", 
+  "isOnline"
+) VALUES (
+  8, 
+  'Test Driver', 
+  0, 
+  0.0, 
+  0, 
+  false, 
+  false, 
+  false, 
+  false, 
+  0, 
+  0.0, 
+  NOW(), 
+  NOW(), 
+  false
+) RETURNING id;

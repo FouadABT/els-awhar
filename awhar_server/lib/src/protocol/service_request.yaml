@@ -1,0 +1,89 @@
+## Service request model for delivery requests
+class: ServiceRequest
+table: service_requests
+fields:
+  id: int?
+  
+  # User references
+  clientId: int
+  driverId: int?         # Assigned driver (after client accepts)
+  proposedDriverId: int? # Driver who proposed to take request (awaiting client approval)
+  
+  # Service details
+  serviceType: ServiceType
+  status: RequestStatus, default=pending
+  
+  # Locations
+  pickupLocation: Location?
+  destinationLocation: Location
+  
+  # Pricing
+  basePrice: double
+  distancePrice: double
+  totalPrice: double
+  estimatedPurchaseCost: double? # Estimated cost of items to purchase
+  deliveryFee: double?      # Fee for the driver (distinct from total price)
+  distance: double?          # in kilometers (null if flexible pickup)
+  estimatedDuration: int?    # in minutes (null if flexible pickup)
+  
+  # Currency (based on driver's country)
+  currency: String, default='MAD'        # Currency code (MAD, USD, EUR)
+  currencySymbol: String, default='DH'   # Currency symbol for display
+  
+  # Price Negotiation Fields
+  clientOfferedPrice: double?   # Price client is willing to pay (null for old requests)
+  driverCounterPrice: double?   # Driver's counter-offer price
+  agreedPrice: double?          # Final negotiated price after acceptance
+  negotiationStatus: PriceNegotiationStatus?, default=waiting_for_offers  # Current negotiation state
+  
+  # Payment
+  isPaid: bool, default=false  # Payment confirmation status
+  
+  # Delivery-specific fields
+  itemDescription: String?   # What's being delivered
+  recipientName: String?     # Who receives at destination
+  recipientPhone: String?    # Delivery contact number
+  specialInstructions: String? # "Leave at door", "Ring bell", etc.
+  packageSize: String?       # "Small", "Medium", "Large"
+  isFragile: bool, default=false  # Fragile item flag
+  isPurchaseRequired: bool, default=false # If driver needs to pay upfront
+  shoppingList: List<ShoppingItem>? # Specific items to buy with quantities
+  attachments: List<String>?  # URLs for photo uploads
+  
+  # Catalog Integration
+  catalogServiceId: int?     # Reference to DriverService if from catalog
+  catalogDriverId: int?      # Pre-assigned driver from catalog (if applicable)
+  
+  # Additional info
+  notes: String?
+  clientName: String
+  clientPhone: String?
+  driverName: String?
+  driverPhone: String?
+  proposedDriverName: String?   # Name of driver who proposed
+  proposedDriverPhone: String?  # Phone of driver who proposed
+  
+  # Cancellation
+  cancelledBy: int?         # User ID who cancelled
+  cancellationReason: String?
+  
+  # Fraud Detection - Device Fingerprint
+  deviceFingerprint: String?  # SHA-256 hash of device characteristics for fraud detection
+  
+  # Timestamps
+  createdAt: DateTime, default=now
+  acceptedAt: DateTime?
+  driverArrivingAt: DateTime?
+  startedAt: DateTime?
+  completedAt: DateTime?
+  cancelledAt: DateTime?
+
+indexes:
+  clientId_index:
+    fields: clientId
+  driverId_index:
+    fields: driverId
+  status_index:
+    fields: status
+  createdAt_index:
+    fields: createdAt

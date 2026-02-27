@@ -1,0 +1,33 @@
+### Geographic & Location Data ###
+
+class: City
+table: cities
+fields:
+  nameEn: String
+  nameAr: String?
+  nameFr: String?
+  nameEs: String?
+  
+  # Location
+  countryCode: String, default='MA'
+  latitude: double
+  longitude: double
+  
+  # Settings
+  isActive: bool, default=true
+  isPopular: bool, default=false
+  displayOrder: int, default=0
+  
+  # Zone Settings
+  defaultDeliveryRadius: double, default=10.0  # in km
+  
+  # Timestamps
+  createdAt: DateTime, default=now
+
+indexes:
+  city_nameEn_idx:
+    fields: nameEn
+  city_isActive_idx:
+    fields: isActive
+  city_displayOrder_idx:
+    fields: displayOrder

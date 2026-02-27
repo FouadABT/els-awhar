@@ -1,0 +1,75 @@
+### Store Orders ###
+
+class: StoreOrder
+table: store_orders
+fields:
+  # Order Number (readable format: ORD-XXXXXX)
+  orderNumber: String
+  
+  # Parties involved
+  storeId: int, relation(parent=stores)
+  clientId: int, relation(parent=users)
+  driverId: int?, relation(parent=users)
+  
+  # Status
+  status: StoreOrderStatus
+  
+  # Order Details (JSON: [{productId, name, price, quantity, notes}])
+  # Stored as JSON for historical accuracy (prices may change)
+  itemsJson: String
+  
+  # Pricing
+  subtotal: double          # Products total
+  deliveryFee: double       # Delivery fee
+  total: double             # Grand total (subtotal + deliveryFee)
+  
+  # Currency (based on store's country)
+  currency: String, default='MAD'        # Currency code (MAD, USD, EUR)
+  currencySymbol: String, default='DH'   # Currency symbol for display
+  
+  # Commission
+  platformCommission: double, default=0.0  # 5% of delivery fee
+  driverEarnings: double, default=0.0      # deliveryFee - commission
+  
+  # Delivery Info
+  deliveryAddress: String
+  deliveryLatitude: double
+  deliveryLongitude: double
+  deliveryDistance: double?  # Distance from store in km
+  
+  # Notes
+  clientNotes: String?
+  storeNotes: String?
+  
+  # Timeline (JSON: [{status, timestamp, note, actor}])
+  timelineJson: String?
+  
+  # Chat - Reference to 3-way chat
+  chatId: int?, relation(parent=store_order_chats)
+  
+  # Cancellation
+  cancelledBy: String?       # 'client', 'store', 'driver', 'system'
+  cancellationReason: String?
+  
+  # Timestamps
+  createdAt: DateTime, default=now
+  confirmedAt: DateTime?
+  readyAt: DateTime?
+  pickedUpAt: DateTime?
+  deliveredAt: DateTime?
+  cancelledAt: DateTime?
+
+indexes:
+  store_order_number_idx:
+    fields: orderNumber
+    unique: true
+  store_order_storeId_idx:
+    fields: storeId
+  store_order_clientId_idx:
+    fields: clientId
+  store_order_driverId_idx:
+    fields: driverId
+  store_order_status_idx:
+    fields: status
+  store_order_createdAt_idx:
+    fields: createdAt

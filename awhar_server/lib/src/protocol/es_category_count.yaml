@@ -1,0 +1,6 @@
+# Analytics Category Count
+class: EsCategoryCount
+fields:
+  categoryId: int
+  categoryName: String
+  count: int

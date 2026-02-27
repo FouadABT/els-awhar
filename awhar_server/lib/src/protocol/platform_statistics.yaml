@@ -1,0 +1,43 @@
+class: PlatformStatistics
+table: platform_statistics
+fields:
+  # Time Period
+  periodType: String  # daily, weekly, monthly
+  periodStart: DateTime
+  periodEnd: DateTime
+  
+  # Users
+  totalUsers: int, default=0
+  newUsers: int, default=0
+  activeUsers: int, default=0
+  
+  # Drivers
+  totalDrivers: int, default=0
+  newDrivers: int, default=0
+  activeDrivers: int, default=0
+  verifiedDrivers: int, default=0
+  
+  # Orders
+  totalOrders: int, default=0
+  completedOrders: int, default=0
+  cancelledOrders: int, default=0
+  disputedOrders: int, default=0
+  
+  # Revenue
+  totalRevenue: double, default=0.0
+  platformRevenue: double, default=0.0
+  subscriptionRevenue: double, default=0.0
+  
+  # Engagement
+  averageOrdersPerUser: double, default=0.0
+  averageOrderValue: double, default=0.0
+  
+  # Timestamp
+  createdAt: DateTime, default=now
+
+indexes:
+  plat_stats_periodType_idx:
+    fields: periodType
+  plat_stats_periodStart_idx:
+    fields: periodStart
+    unique: true

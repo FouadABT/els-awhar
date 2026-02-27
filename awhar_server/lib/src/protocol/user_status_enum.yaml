@@ -1,0 +1,7 @@
+enum: UserStatus
+serialized: byIndex
+values:
+  - active
+  - suspended
+  - banned
+  - deleted

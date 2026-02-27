@@ -1,0 +1,20 @@
+### DashboardStats
+### Statistics for admin dashboard overview
+
+class: DashboardStats
+fields:
+  totalUsers: int
+  totalDrivers: int
+  onlineDrivers: int
+  totalClients: int
+  totalStores: int
+  activeStores: int
+  totalRequests: int
+  pendingRequests: int
+  completedRequests: int
+  totalOrders: int
+  pendingOrders: int
+  pendingReports: int
+  totalRevenue: double
+  totalCommission: double
+  updatedAt: DateTime

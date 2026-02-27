@@ -1,0 +1,4 @@
+class: RatingStats
+fields:
+  averageRating: double
+  totalRatings: int

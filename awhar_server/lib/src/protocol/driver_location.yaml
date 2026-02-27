@@ -1,0 +1,27 @@
+### Driver Live Location Data ###
+# Stored in Firebase Realtime Database for real-time updates
+# Path: /driver_locations/{driverId}
+
+class: DriverLocation
+fields:
+  # Driver Reference
+  driverId: int
+  
+  # Location Coordinates
+  latitude: double
+  longitude: double
+  
+  # Movement Data
+  speed: double?  # Speed in m/s
+  heading: double?  # Direction in degrees (0-360)
+  accuracy: double?  # Accuracy in meters
+  
+  # Altitude
+  altitude: double?
+  
+  # Timestamp
+  timestamp: DateTime, default=now
+  
+  # Additional Info
+  isMoving: bool, default=false
+  batteryLevel: int?  # Battery percentage 0-100

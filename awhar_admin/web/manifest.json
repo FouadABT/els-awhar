@@ -1,0 +1,11 @@
+{
+    "name": "Awhar Admin Dashboard",
+    "short_name": "Awhar Admin",
+    "start_url": ".",
+    "display": "standalone",
+    "background_color": "#FFFFFF",
+    "theme_color": "#2196F3",
+    "description": "Admin dashboard for Awhar platform",
+    "orientation": "landscape",
+    "prefer_related_applications": false
+}

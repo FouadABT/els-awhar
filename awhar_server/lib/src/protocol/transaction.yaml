@@ -1,0 +1,58 @@
+## Transaction model for tracking all payments (cash only for MVP)
+class: Transaction
+table: transactions
+fields:
+  id: int?
+  
+  # References
+  userId: int              # User who made/received the transaction
+  requestId: int?          # Related service request (if applicable)
+  
+  # Transaction details
+  amount: double           # Transaction amount in local currency
+  type: TransactionType    # Type of transaction
+  status: TransactionStatus, default=completed
+  paymentMethod: String, default='cash'  # Always 'cash' for MVP
+  
+  # Currency tracking (for multi-country support)
+  currency: String, default='MAD'              # Currency code (MAD, USD, EUR)
+  currencySymbol: String, default='DH'         # Currency symbol for display
+  baseCurrencyAmount: double?                  # Amount converted to base currency (MAD)
+  exchangeRateToBase: double, default=1.0      # Exchange rate used for conversion
+  
+  # Tax/VAT tracking
+  vatRate: double, default=0.0                 # VAT rate applied (0.20 = 20%)
+  vatAmount: double, default=0.0               # VAT amount included in transaction
+  
+  # Description and metadata
+  description: String?     # Transaction description
+  notes: String?           # Additional notes
+  
+  # Commission tracking (for platform revenue)
+  platformCommission: double, default=0.0  # Platform fee amount
+  driverEarnings: double, default=0.0      # Amount driver receives after commission
+  
+  # Confirmation tracking (dual confirmation system)
+  driverConfirmed: bool, default=false     # Driver confirmed receiving payment
+  clientConfirmed: bool, default=false     # Client confirmed making payment
+  driverConfirmedAt: DateTime?
+  clientConfirmedAt: DateTime?
+  
+  # Timestamps
+  createdAt: DateTime, default=now
+  completedAt: DateTime?
+  refundedAt: DateTime?
+
+indexes:
+  transaction_userId_index:
+    fields: userId
+  transaction_requestId_index:
+    fields: requestId
+  transaction_type_index:
+    fields: type
+  transaction_status_index:
+    fields: status
+  transaction_createdAt_index:
+    fields: createdAt
+  transaction_userId_createdAt_index:
+    fields: userId, createdAt

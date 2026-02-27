@@ -1,0 +1,28 @@
+### Device Fingerprint Check Response
+### Returned when checking a device fingerprint
+
+class: DeviceFingerprintCheckResult
+fields:
+  ### The fingerprint record (if found)
+  fingerprintHash: String
+  
+  ### Risk assessment
+  riskScore: double                   # 0-100
+  riskLevel: String                   # low, medium, high, critical
+  riskFactors: List<String>           # List of reasons for risk
+  
+  ### Decision
+  isAllowed: bool                     # Whether to allow the action
+  requiresVerification: bool          # Whether additional verification needed
+  isBlocked: bool                     # Device is blocked
+  
+  ### Previous accounts on this device
+  linkedUserCount: int                # Number of users on this device
+  linkedUserIds: List<int>?           # User IDs (if admin)
+  
+  ### Timestamps
+  firstSeenAt: DateTime?
+  lastSeenAt: DateTime?
+  
+  ### Message for display
+  message: String?

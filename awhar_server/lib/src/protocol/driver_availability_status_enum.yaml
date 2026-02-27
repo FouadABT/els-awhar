@@ -1,0 +1,7 @@
+enum: DriverAvailabilityStatus
+serialized: byIndex
+values:
+  - offline
+  - available
+  - busy
+  - on_break

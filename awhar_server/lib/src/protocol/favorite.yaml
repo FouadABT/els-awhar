@@ -1,0 +1,17 @@
+class: Favorite
+table: favorites
+fields:
+  clientId: int, relation(parent=user_clients, onDelete=cascade)
+  driverId: int, relation(parent=driver_profiles, onDelete=cascade)
+  
+  # Timestamp
+  createdAt: DateTime, default=now
+
+indexes:
+  fav_clientId_idx:
+    fields: clientId
+  fav_driverId_idx:
+    fields: driverId
+  fav_client_driver_unique:
+    fields: clientId, driverId
+    unique: true

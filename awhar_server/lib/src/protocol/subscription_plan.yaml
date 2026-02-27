@@ -1,0 +1,44 @@
+### Monetization & Subscriptions ###
+
+class: SubscriptionPlan
+table: subscription_plans
+fields:
+  # Plan Details
+  nameEn: String
+  nameAr: String?
+  nameFr: String?
+  nameEs: String?
+  
+  # Description
+  descriptionEn: String?
+  descriptionAr: String?
+  descriptionFr: String?
+  descriptionEs: String?
+  
+  # Pricing
+  priceAmount: double
+  currency: String, default='MAD'
+  durationMonths: int
+  
+  # Features
+  features: List<String>  # JSON list of feature keys
+  
+  # Settings
+  isActive: bool, default=true
+  isFeatured: bool, default=false
+  displayOrder: int, default=0
+  
+  # Benefits
+  commissionRate: double?  # Lower commission for premium
+  priorityListing: bool, default=false
+  badgeEnabled: bool, default=false
+  
+  # Timestamps
+  createdAt: DateTime, default=now
+  updatedAt: DateTime, default=now
+
+indexes:
+  plan_isActive_idx:
+    fields: isActive
+  plan_displayOrder_idx:
+    fields: displayOrder

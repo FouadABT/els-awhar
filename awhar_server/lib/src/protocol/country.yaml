@@ -1,0 +1,53 @@
+### Country Reference Data
+### Stores country information including currency settings
+
+class: Country
+table: countries
+fields:
+  # Country identification
+  code: String              # ISO 3166-1 alpha-2: 'MA', 'US', 'FR'
+  name: String              # 'Morocco', 'United States', 'France'
+  nameAr: String?           # Arabic name: 'المغرب'
+  nameFr: String?           # French name: 'Maroc'
+  
+  # Currency settings
+  currencyCode: String      # ISO 4217: 'MAD', 'USD', 'EUR'
+  currencySymbol: String    # 'DH', '$', '€'
+  currencyName: String      # 'Moroccan Dirham', 'US Dollar'
+  currencyNameAr: String?   # Arabic: 'الدرهم المغربي'
+  
+  # Tax/VAT settings
+  vatRate: double, default=0.0           # 0.20 = 20% VAT
+  vatName: String, default='VAT'         # 'VAT', 'TVA', 'Tax'
+  
+  # Phone settings
+  phonePrefix: String?      # '+212', '+1', '+33'
+  phonePlaceholder: String? # '6XX-XXXXXX'
+  
+  # Locale settings
+  defaultLanguage: String, default='en'  # Default language for country
+  
+  # Platform settings for this country
+  minPrice: double, default=15.0         # Minimum price in local currency
+  commissionRate: double, default=0.05   # Platform commission rate
+  
+  # Exchange rate (to base currency MAD)
+  exchangeRateToMAD: double, default=1.0 # 1 USD = X MAD
+  exchangeRateUpdatedAt: DateTime?
+  
+  # Status
+  isActive: bool, default=true
+  isDefault: bool, default=false         # Morocco is default
+  
+  # Timestamps
+  createdAt: DateTime, default=now
+  updatedAt: DateTime, default=now
+
+indexes:
+  country_code_idx:
+    fields: code
+    unique: true
+  country_currencyCode_idx:
+    fields: currencyCode
+  country_isActive_idx:
+    fields: isActive

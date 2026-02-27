@@ -1,0 +1,8 @@
+## Status for driver proposals
+enum: ProposalStatus
+values:
+  - pending    # Proposal submitted, waiting for client decision
+  - accepted   # Client accepted this proposal (request assigned to driver)
+  - rejected   # Client rejected this proposal
+  - withdrawn  # Driver withdrew their proposal
+  - expired    # Proposal expired (request was fulfilled by another driver)

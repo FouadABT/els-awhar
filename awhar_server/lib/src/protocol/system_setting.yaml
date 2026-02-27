@@ -1,0 +1,20 @@
+class: SystemSetting
+table: system_settings
+fields:
+  # Setting Key (unique identifier)
+  key: String
+  
+  # Value (JSON string for flexibility)
+  value: String
+  
+  # Description
+  description: String?
+  
+  # Timestamps
+  createdAt: DateTime, default=now
+  updatedAt: DateTime, default=now
+
+indexes:
+  key_idx:
+    fields: key
+    unique: true

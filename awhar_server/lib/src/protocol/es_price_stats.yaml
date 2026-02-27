@@ -1,0 +1,9 @@
+# Price Statistics
+class: EsPriceStats
+fields:
+  categoryId: int?
+  categoryName: String?
+  minPrice: double
+  maxPrice: double
+  avgPrice: double
+  count: int

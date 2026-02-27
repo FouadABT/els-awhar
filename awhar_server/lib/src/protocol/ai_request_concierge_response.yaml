@@ -1,0 +1,10 @@
+# AI Request Concierge Response
+class: AiRequestConciergeResponse
+fields:
+  agentType: AiAgentType
+  status: AiResponseStatus
+  errorMessage: String?
+  processingTimeMs: int
+  timestamp: DateTime
+  parsedRequest: AiParsedServiceRequest?
+  humanReadableSummary: String

@@ -1,0 +1,14 @@
+enum: ReportReason
+serialized: byIndex
+values:
+  - spam
+  - inappropriate_content
+  - harassment
+  - fake_profile
+  - scam
+  - illegal_activity
+  - safety_concern
+  - fraud
+  - poor_service
+  - wrong_information
+  - other

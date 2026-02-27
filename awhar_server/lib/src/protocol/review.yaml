@@ -1,0 +1,47 @@
+### Reviews & Ratings ###
+
+class: Review
+table: reviews
+fields:
+  orderId: int, relation(parent=orders, onDelete=cascade)
+  driverId: int, relation(parent=driver_profiles, onDelete=cascade)
+  clientId: int, relation(parent=user_clients, onDelete=cascade)
+  
+  # Rating (1-5)
+  rating: int
+  
+  # Comment
+  comment: String?
+  
+  # Visibility
+  isVisible: bool, default=true
+  isVerified: bool, default=true  # Verified purchase
+  
+  # Flags
+  isFlagged: bool, default=false
+  flagReason: String?
+  flaggedByUserId: int?, relation(parent=users)
+  flaggedAt: DateTime?
+  
+  # Driver Response
+  driverResponse: String?
+  driverRespondedAt: DateTime?
+  
+  # Timestamps
+  createdAt: DateTime, default=now
+  updatedAt: DateTime, default=now
+
+indexes:
+  rev_orderId_idx:
+    fields: orderId
+    unique: true
+  rev_driverId_idx:
+    fields: driverId
+  rev_clientId_idx:
+    fields: clientId
+  rev_rating_idx:
+    fields: rating
+  rev_isVisible_idx:
+    fields: isVisible
+  rev_createdAt_idx:
+    fields: createdAt

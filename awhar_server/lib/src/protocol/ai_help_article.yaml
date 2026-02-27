@@ -1,0 +1,7 @@
+# AI Help Article - Knowledge base article from ELSER semantic search
+class: AiHelpArticle
+fields:
+  title: String
+  content: String
+  category: String
+  relevanceScore: double

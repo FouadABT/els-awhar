@@ -1,0 +1,881 @@
+import 'package:awhar_client/awhar_client.dart';
+import 'package:awhar_flutter/core/controllers/request_controller.dart';
+import 'package:awhar_flutter/core/services/location_service.dart';
+import 'package:awhar_flutter/core/theme/app_colors.dart';
+import 'package:awhar_flutter/core/theme/app_typography.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:iconsax_flutter/iconsax_flutter.dart';
+
+/// Screen for clients to create a new service request
+class CreateRequestScreen extends StatefulWidget {
+  const CreateRequestScreen({super.key});
+
+  @override
+  State<CreateRequestScreen> createState() => _CreateRequestScreenState();
+}
+
+class _CreateRequestScreenState extends State<CreateRequestScreen> {
+  final RequestController controller = Get.put(RequestController());
+  final TextEditingController notesController = TextEditingController();
+  final TextEditingController priceController = TextEditingController();
+  final TextEditingController itemDescriptionController = TextEditingController();
+  final TextEditingController recipientNameController = TextEditingController();
+  final TextEditingController recipientPhoneController = TextEditingController();
+  final TextEditingController specialInstructionsController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    
+    // Auto-populate destination with user's current location
+    _initializeDestination();
+    
+    // Listen for errors and show snackbar
+    ever(controller.errorMessage, (String message) {
+      if (message.isNotEmpty) {
+        Get.snackbar(
+          'common.error'.tr,
+          message,
+          snackPosition: SnackPosition.TOP,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+          icon: const Icon(Iconsax.info_circle, color: Colors.white),
+          duration: const Duration(seconds: 4),
+          margin: EdgeInsets.all(16.w),
+          borderRadius: 12.r,
+        );
+        controller.clearError();
+      }
+    });
+
+    // Note: Client enters their own price - no auto-fill needed
+  }
+
+  @override
+  void dispose() {
+    notesController.dispose();
+    priceController.dispose();
+    itemDescriptionController.dispose();
+    recipientNameController.dispose();
+    recipientPhoneController.dispose();
+    specialInstructionsController.dispose();
+    super.dispose();
+  }
+
+  /// Initialize destination with user's current location
+  Future<void> _initializeDestination() async {
+    try {
+      final locationService = Get.find<LocationService>();
+      final position = await locationService.getCurrentPosition();
+      if (position != null && controller.destinationLocation.value == null) {
+        controller.destinationLocation.value = Location(
+          latitude: position.latitude,
+          longitude: position.longitude,
+          address: 'Current Location',
+          placeName: 'Your current location',
+          city: null,
+          country: 'Morocco',
+        );
+      }
+    } catch (e) {
+      debugPrint('Could not auto-populate destination: $e');
+    }
+  }
+
+  /// Check if form can be submitted
+  bool _canSubmit() {
+    final isLoading = controller.isLoading.value;
+    final hasPickup = controller.pickupLocation.value != null;
+    final hasDestination = controller.destinationLocation.value != null;
+    final hasValidPrice = controller.clientOfferedPrice.value >= 15;
+    
+    // Debug: Print validation status
+    debugPrint('[CreateRequest] Validation: loading=$isLoading, pickup=$hasPickup, destination=$hasDestination, price=${controller.clientOfferedPrice.value} (valid=$hasValidPrice)');
+    
+    if (isLoading) return false;
+    if (!hasPickup) return false;
+    if (!hasDestination) return false;
+    if (!hasValidPrice) return false;
+    return true;
+  }
+
+  /// Get validation message showing what's missing
+  String _getValidationMessage() {
+    if (controller.pickupLocation.value == null) {
+      return 'Please select pickup location';
+    }
+    if (controller.destinationLocation.value == null) {
+      return 'Please select destination';
+    }
+    if (controller.clientOfferedPrice.value < 15) {
+      if (controller.clientOfferedPrice.value == 0) {
+        return 'Waiting for price calculation...';
+      }
+      return 'Minimum price is 15 MAD';
+    }
+    return '';
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final colors = isDark ? AppColors.dark : AppColors.light;
+
+    return Scaffold(
+      backgroundColor: colors.background,
+      appBar: AppBar(
+        backgroundColor: colors.surface,
+        elevation: 0,
+        leading: IconButton(
+          icon: Icon(Iconsax.arrow_left, color: colors.textPrimary),
+          onPressed: () => Get.back(),
+        ),
+        title: Text(
+          'request.create_title'.tr,
+          style: AppTypography.titleLarge(context).copyWith(color: colors.textPrimary),
+        ),
+      ),
+      body: Obx(
+        () => SingleChildScrollView(
+          padding: EdgeInsets.all(20.w),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Service Type Selection
+              Text(
+                'request.select_service_type'.tr,
+                style: AppTypography.titleMedium(context).copyWith(color: colors.textPrimary),
+              ),
+              SizedBox(height: 16.h),
+              _buildServiceTypeSelector(colors),
+              SizedBox(height: 24.h),
+
+              // Pickup Location
+              Text(
+                'request.pickup_location'.tr,
+                style: AppTypography.titleMedium(context).copyWith(color: colors.textPrimary),
+              ),
+              SizedBox(height: 12.h),
+              _buildLocationCard(
+                colors,
+                icon: Iconsax.location,
+                label: controller.pickupLocation.value?.placeName ??
+                    controller.pickupLocation.value?.address ??
+                    'request.select_pickup'.tr,
+                onTap: () => _selectLocation(isPickup: true),
+              ),
+              SizedBox(height: 24.h),
+
+              // Destination Location (Auto-populated, editable)
+              Row(
+                children: [
+                  Text(
+                    'request.destination'.tr,
+                    style: AppTypography.titleMedium(context).copyWith(color: colors.textPrimary),
+                  ),
+                  SizedBox(width: 8.w),
+                  if (controller.destinationLocation.value?.address == 'Current Location')
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                      decoration: BoxDecoration(
+                        color: colors.success.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(6.r),
+                      ),
+                      child: Text(
+                        'common.auto'.tr,
+                        style: AppTypography.bodySmall(context).copyWith(
+                          color: colors.success,
+                          fontSize: 10.sp,
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+              SizedBox(height: 12.h),
+              _buildLocationCard(
+                colors,
+                icon: Iconsax.location_tick,
+                label: controller.destinationLocation.value?.placeName ??
+                    controller.destinationLocation.value?.address ??
+                    'request.select_destination'.tr,
+                subtitle: controller.destinationLocation.value?.address == 'Current Location'
+                    ? 'request.tap_to_change'.tr
+                    : null,
+                onTap: () => _selectLocation(isPickup: false),
+              ),
+              SizedBox(height: 24.h),
+
+              // Your Price Offer (Always visible - client sets their own price)
+              Text(
+                'negotiation.your_offer'.tr,
+                style: AppTypography.titleMedium(context).copyWith(color: colors.textPrimary),
+              ),
+              SizedBox(height: 8.h),
+              
+              // Optional: Price suggestion banner (only if calculated)
+              if (controller.suggestedMinPrice.value > 0) ...[
+                Container(
+                  padding: EdgeInsets.all(12.w),
+                  decoration: BoxDecoration(
+                    color: colors.info.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(12.r),
+                    border: Border.all(color: colors.info),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(Iconsax.info_circle, color: colors.info, size: 20.sp),
+                      SizedBox(width: 8.w),
+                      Expanded(
+                        child: Text(
+                          'negotiation.suggested_range'.trParams({
+                            'min': controller.suggestedMinPrice.value.toStringAsFixed(0),
+                            'max': controller.suggestedMaxPrice.value.toStringAsFixed(0),
+                          }),
+                          style: AppTypography.bodySmall(context).copyWith(color: colors.textSecondary),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 12.h),
+              ],
+
+              // Price input field (always visible)
+              TextField(
+                controller: priceController,
+                keyboardType: TextInputType.number,
+                style: AppTypography.bodyMedium(context).copyWith(color: colors.textPrimary),
+                onChanged: (value) {
+                  final price = double.tryParse(value) ?? 0.0;
+                  controller.clientOfferedPrice.value = price;
+                },
+                decoration: InputDecoration(
+                  hintText: 'negotiation.enter_price'.tr,
+                  hintStyle: AppTypography.bodyMedium(context).copyWith(color: colors.textSecondary),
+                  prefixIcon: Icon(Iconsax.wallet_money, color: colors.textSecondary),
+                  suffixText: 'MAD',
+                  suffixStyle: AppTypography.bodyMedium(context).copyWith(color: colors.textPrimary),
+                  filled: true,
+                  fillColor: colors.surface,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12.r),
+                    borderSide: BorderSide(color: colors.border),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12.r),
+                    borderSide: BorderSide(color: colors.border),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12.r),
+                    borderSide: BorderSide(color: colors.primary, width: 2),
+                  ),
+                ),
+                ),
+                SizedBox(height: 8.h),
+
+                // Price validation feedback
+                if (controller.clientOfferedPrice.value > 0) ...[
+                  if (controller.clientOfferedPrice.value < 15) ...[
+                    _buildPriceFeedback(
+                      colors,
+                      icon: Iconsax.danger,
+                      color: colors.error,
+                      message: 'negotiation.price_too_low'.tr,
+                    ),
+                ] else if (controller.suggestedMinPrice.value > 0) ...[
+                  // Show suggestion-based feedback only if suggestions are available
+                  if (controller.clientOfferedPrice.value < controller.suggestedMinPrice.value) ...[
+                    _buildPriceFeedback(
+                      colors,
+                      icon: Iconsax.warning_2,
+                      color: colors.warning,
+                      message: 'negotiation.price_low_warning'.tr,
+                    ),
+                  ] else if (controller.clientOfferedPrice.value >= controller.suggestedMinPrice.value &&
+                      controller.clientOfferedPrice.value <= controller.suggestedMaxPrice.value) ...[
+                    _buildPriceFeedback(
+                      colors,
+                      icon: Iconsax.tick_circle,
+                      color: colors.success,
+                      message: 'negotiation.good_price'.tr,
+                    ),
+                  ] else if (controller.clientOfferedPrice.value > controller.suggestedMaxPrice.value) ...[
+                    _buildPriceFeedback(
+                      colors,
+                      icon: Iconsax.info_circle,
+                      color: colors.info,
+                      message: 'negotiation.price_high_info'.tr,
+                    ),
+                  ],
+                ] else ...[
+                  // No suggestions - just show that price is valid
+                  _buildPriceFeedback(
+                    colors,
+                    icon: Iconsax.tick_circle,
+                    color: colors.success,
+                    message: 'Price accepted (minimum 15 MAD)',
+                  ),
+                ],
+              ],
+              SizedBox(height: 24.h),
+
+              // Service Details (always visible for all service types)
+              // Item Description
+              Text(
+                'request.item_description'.tr,
+                style: AppTypography.titleMedium(context).copyWith(color: colors.textPrimary),
+              ),
+              SizedBox(height: 12.h),
+              TextField(
+                controller: itemDescriptionController,
+                onChanged: (value) => controller.itemDescription.value = value,
+                  style: AppTypography.bodyMedium(context).copyWith(color: colors.textPrimary),
+                  decoration: InputDecoration(
+                    hintText: 'request.item_description_hint'.tr,
+                    hintStyle: AppTypography.bodyMedium(context).copyWith(color: colors.textSecondary),
+                    filled: true,
+                    fillColor: colors.surface,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12.r),
+                      borderSide: BorderSide(color: colors.border),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12.r),
+                      borderSide: BorderSide(color: colors.border),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12.r),
+                      borderSide: BorderSide(color: colors.primary, width: 2),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 20.h),
+
+                // Package Size Selection
+                Text(
+                  'request.package_size'.tr,
+                  style: AppTypography.titleMedium(context).copyWith(color: colors.textPrimary),
+                ),
+                SizedBox(height: 12.h),
+                _buildPackageSizeSelector(colors),
+                SizedBox(height: 20.h),
+
+                // Fragile Checkbox
+                _buildFragileCheckbox(colors),
+                SizedBox(height: 20.h),
+
+                // Recipient Information
+                Text(
+                  'request.recipient_info'.tr,
+                  style: AppTypography.titleMedium(context).copyWith(color: colors.textPrimary),
+                ),
+                SizedBox(height: 12.h),
+                
+                // Recipient Name
+                TextField(
+                  controller: recipientNameController,
+                  onChanged: (value) => controller.recipientName.value = value,
+                  style: AppTypography.bodyMedium(context).copyWith(color: colors.textPrimary),
+                  decoration: InputDecoration(
+                    hintText: 'request.recipient_name_hint'.tr,
+                    hintStyle: AppTypography.bodyMedium(context).copyWith(color: colors.textSecondary),
+                    prefixIcon: Icon(Iconsax.user, color: colors.textSecondary),
+                    filled: true,
+                    fillColor: colors.surface,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12.r),
+                      borderSide: BorderSide(color: colors.border),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12.r),
+                      borderSide: BorderSide(color: colors.border),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12.r),
+                      borderSide: BorderSide(color: colors.primary, width: 2),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 12.h),
+                
+                // Recipient Phone
+                TextField(
+                  controller: recipientPhoneController,
+                  onChanged: (value) => controller.recipientPhone.value = value,
+                  keyboardType: TextInputType.phone,
+                  style: AppTypography.bodyMedium(context).copyWith(color: colors.textPrimary),
+                  decoration: InputDecoration(
+                    hintText: 'request.recipient_phone_hint'.tr,
+                    hintStyle: AppTypography.bodyMedium(context).copyWith(color: colors.textSecondary),
+                    prefixIcon: Icon(Iconsax.call, color: colors.textSecondary),
+                    filled: true,
+                    fillColor: colors.surface,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12.r),
+                      borderSide: BorderSide(color: colors.border),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12.r),
+                      borderSide: BorderSide(color: colors.border),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12.r),
+                      borderSide: BorderSide(color: colors.primary, width: 2),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 20.h),
+
+                // Special Instructions
+                Text(
+                  'request.special_instructions'.tr,
+                  style: AppTypography.titleMedium(context).copyWith(color: colors.textPrimary),
+                ),
+                SizedBox(height: 12.h),
+                TextField(
+                  controller: specialInstructionsController,
+                  onChanged: (value) => controller.specialInstructions.value = value,
+                  maxLines: 2,
+                  style: AppTypography.bodyMedium(context).copyWith(color: colors.textPrimary),
+                  decoration: InputDecoration(
+                    hintText: 'request.special_instructions_hint'.tr,
+                    hintStyle: AppTypography.bodyMedium(context).copyWith(color: colors.textSecondary),
+                    filled: true,
+                    fillColor: colors.surface,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12.r),
+                      borderSide: BorderSide(color: colors.border),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12.r),
+                      borderSide: BorderSide(color: colors.border),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12.r),
+                      borderSide: BorderSide(color: colors.primary, width: 2),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 24.h),
+
+              // General Notes
+              Text(
+                'request.additional_notes'.tr,
+                style: AppTypography.titleMedium(context).copyWith(color: colors.textPrimary),
+              ),
+              SizedBox(height: 12.h),
+              TextField(
+                controller: notesController,
+                onChanged: (value) => controller.notes.value = value,
+                maxLines: 3,
+                style: AppTypography.bodyMedium(context).copyWith(color: colors.textPrimary),
+                decoration: InputDecoration(
+                  hintText: 'request.notes_hint'.tr,
+                  hintStyle: AppTypography.bodyMedium(context).copyWith(color: colors.textSecondary),
+                  filled: true,
+                  fillColor: colors.surface,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12.r),
+                    borderSide: BorderSide(color: colors.border),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12.r),
+                    borderSide: BorderSide(color: colors.border),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12.r),
+                    borderSide: BorderSide(color: colors.primary, width: 2),
+                  ),
+                ),
+              ),
+              SizedBox(height: 32.h),
+
+              // Create Request Button
+              Obx(
+                () => SizedBox(
+                  width: double.infinity,
+                  height: 56.h,
+                  child: ElevatedButton(
+                    onPressed: _canSubmit() ? () async {
+                      final success = await controller.createRequest();
+                      if (success) {
+                        Get.back();
+                        Get.snackbar(
+                          'common.success'.tr,
+                          'request.created_success'.tr,
+                          snackPosition: SnackPosition.TOP,
+                          backgroundColor: colors.success,
+                          colorText: Colors.white,
+                          icon: const Icon(Iconsax.tick_circle, color: Colors.white),
+                          margin: EdgeInsets.all(16.w),
+                          borderRadius: 12.r,
+                        );
+                      }
+                    } : null,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: colors.primary,
+                      disabledBackgroundColor: colors.textSecondary.withValues(alpha: 0.3),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12.r),
+                      ),
+                      elevation: 0,
+                    ),
+                    child: controller.isLoading.value
+                        ? SizedBox(
+                            height: 24.h,
+                            width: 24.w,
+                            child: const CircularProgressIndicator(
+                              color: Colors.white,
+                              strokeWidth: 2,
+                            ),
+                          )
+                        : Text(
+                            'request.post_request'.tr,
+                            style: AppTypography.titleMedium(context).copyWith(color: Colors.white),
+                          ),
+                  ),
+                ),
+              ),
+              
+              // Validation feedback (helpful for debugging)
+              if (!_canSubmit() && !controller.isLoading.value) ...[
+                SizedBox(height: 12.h),
+                Container(
+                  padding: EdgeInsets.all(12.w),
+                  decoration: BoxDecoration(
+                    color: colors.warning.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(8.r),
+                    border: Border.all(color: colors.warning.withValues(alpha: 0.3)),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(Iconsax.info_circle, color: colors.warning, size: 16.sp),
+                      SizedBox(width: 8.w),
+                      Expanded(
+                        child: Text(
+                          _getValidationMessage(),
+                          style: AppTypography.bodySmall(context).copyWith(
+                            color: colors.warning,
+                            fontSize: 11.sp,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+              
+              SizedBox(height: 24.h),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// Build price feedback indicator
+  Widget _buildPriceFeedback(
+    AppColorScheme colors, {
+    required IconData icon,
+    required Color color,
+    required String message,
+  }) {
+    return Row(
+      children: [
+        Icon(icon, color: color, size: 16.sp),
+        SizedBox(width: 6.w),
+        Expanded(
+          child: Text(
+            message,
+            style: AppTypography.bodySmall(context).copyWith(color: color),
+          ),
+        ),
+      ],
+    );
+  }
+
+  /// Build service type selector cards
+  Widget _buildServiceTypeSelector(AppColorScheme colors) {
+    return Obx(
+      () => Row(
+        children: [
+          Expanded(
+            child: _buildServiceTypeCard(
+              colors,
+              type: ServiceType.delivery,
+              icon: Iconsax.box,
+              label: 'service_type.delivery'.tr,
+              description: 'service_type.delivery_desc'.tr,
+            ),
+          ),
+          SizedBox(width: 16.w),
+          Expanded(
+            child: _buildServiceTypeCard(
+              colors,
+              type: ServiceType.moving,
+              icon: Iconsax.truck_fast,
+              label: 'service_type.moving'.tr,
+              description: 'service_type.moving_desc'.tr,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// Build individual service type card
+  Widget _buildServiceTypeCard(
+    AppColorScheme colors, {
+    required ServiceType type,
+    required IconData icon,
+    required String label,
+    required String description,
+  }) {
+    final isSelected = controller.selectedServiceType.value == type;
+
+    return GestureDetector(
+      onTap: () => controller.selectedServiceType.value = type,
+      child: Container(
+        padding: EdgeInsets.all(16.w),
+        decoration: BoxDecoration(
+          color: isSelected ? colors.primary : colors.surface,
+          borderRadius: BorderRadius.circular(16.r),
+          border: Border.all(
+            color: isSelected ? colors.primary : colors.border,
+            width: isSelected ? 2 : 1,
+          ),
+          boxShadow: isSelected ? [
+            BoxShadow(
+              color: colors.primary.withValues(alpha: 0.3),
+              blurRadius: 8,
+              offset: const Offset(0, 4),
+            ),
+          ] : null,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              icon,
+              color: isSelected ? Colors.white : colors.primary,
+              size: 40.sp,
+            ),
+            SizedBox(height: 12.h),
+            Text(
+              label,
+              style: AppTypography.titleMedium(context).copyWith(
+                color: isSelected ? Colors.white : colors.textPrimary,
+                fontWeight: FontWeight.w600,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(height: 4.h),
+            Text(
+              description,
+              style: AppTypography.bodySmall(context).copyWith(
+                color: isSelected ? Colors.white.withValues(alpha: 0.9) : colors.textSecondary,
+                fontSize: 11.sp,
+              ),
+              textAlign: TextAlign.center,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// Build location selection card
+  Widget _buildLocationCard(
+    AppColorScheme colors, {
+    required IconData icon,
+    required String label,
+    String? subtitle,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: EdgeInsets.all(16.w),
+        decoration: BoxDecoration(
+          color: colors.surface,
+          borderRadius: BorderRadius.circular(12.r),
+          border: Border.all(color: colors.border),
+        ),
+        child: Row(
+          children: [
+            Icon(icon, color: colors.primary, size: 24.sp),
+            SizedBox(width: 12.w),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    label,
+                    style: AppTypography.bodyMedium(context).copyWith(color: colors.textPrimary),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  if (subtitle != null) ...[
+                    SizedBox(height: 4.h),
+                    Text(
+                      subtitle,
+                      style: AppTypography.bodySmall(context).copyWith(
+                        color: colors.textSecondary,
+                        fontSize: 11.sp,
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+            ),
+            Icon(Iconsax.arrow_right_3, color: colors.textSecondary, size: 20.sp),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// Build package size selector
+  Widget _buildPackageSizeSelector(AppColorScheme colors) {
+    return Obx(
+      () => Row(
+        children: [
+          Expanded(
+            child: _buildPackageSizeOption(colors, 'Small', 'request.package_small'.tr),
+          ),
+          SizedBox(width: 8.w),
+          Expanded(
+            child: _buildPackageSizeOption(colors, 'Medium', 'request.package_medium'.tr),
+          ),
+          SizedBox(width: 8.w),
+          Expanded(
+            child: _buildPackageSizeOption(colors, 'Large', 'request.package_large'.tr),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPackageSizeOption(AppColorScheme colors, String value, String label) {
+    final isSelected = controller.packageSize.value == value;
+    return GestureDetector(
+      onTap: () => controller.packageSize.value = value,
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: 12.h),
+        decoration: BoxDecoration(
+          color: isSelected ? colors.primary.withValues(alpha: 0.1) : colors.surface,
+          borderRadius: BorderRadius.circular(12.r),
+          border: Border.all(
+            color: isSelected ? colors.primary : colors.border,
+            width: isSelected ? 2 : 1,
+          ),
+        ),
+        child: Center(
+          child: Text(
+            label,
+            style: AppTypography.bodyMedium(context).copyWith(
+              color: isSelected ? colors.primary : colors.textPrimary,
+              fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// Build fragile checkbox
+  Widget _buildFragileCheckbox(AppColorScheme colors) {
+    return Obx(
+      () => GestureDetector(
+        onTap: () => controller.isFragile.value = !controller.isFragile.value,
+        child: Container(
+          padding: EdgeInsets.all(16.w),
+          decoration: BoxDecoration(
+            color: controller.isFragile.value 
+                ? colors.warning.withValues(alpha: 0.1) 
+                : colors.surface,
+            borderRadius: BorderRadius.circular(12.r),
+            border: Border.all(
+              color: controller.isFragile.value ? colors.warning : colors.border,
+              width: controller.isFragile.value ? 2 : 1,
+            ),
+          ),
+          child: Row(
+            children: [
+              Icon(
+                controller.isFragile.value ? Iconsax.tick_square : Iconsax.square,
+                color: controller.isFragile.value ? colors.warning : colors.textSecondary,
+                size: 24.sp,
+              ),
+              SizedBox(width: 12.w),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'request.fragile_item'.tr,
+                      style: AppTypography.bodyMedium(context).copyWith(
+                        color: colors.textPrimary,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    SizedBox(height: 2.h),
+                    Text(
+                      'request.fragile_hint'.tr,
+                      style: AppTypography.bodySmall(context).copyWith(
+                        color: colors.textSecondary,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              if (controller.isFragile.value)
+                Icon(Iconsax.danger, color: colors.warning, size: 20.sp),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// Navigate to location selection screen
+  Future<void> _selectLocation({required bool isPickup}) async {
+    final currentLocation = isPickup 
+        ? controller.pickupLocation.value 
+        : controller.destinationLocation.value;
+
+    final result = await Get.toNamed(
+      '/location-picker',
+      arguments: {
+        'isPickup': isPickup,
+        'lat': currentLocation?.latitude,
+        'lng': currentLocation?.longitude,
+      },
+    );
+
+    if (result != null && result is Map<String, dynamic>) {
+      final location = Location(
+        latitude: result['lat'] as double,
+        longitude: result['lng'] as double,
+        address: result['address'] as String?,
+        placeName: result['address'] as String?,
+        city: null,
+        country: 'Morocco',
+      );
+
+      if (isPickup) {
+        controller.pickupLocation.value = location;
+      } else {
+        controller.destinationLocation.value = location;
+      }
+
+      // Calculate estimate if both locations are set
+      controller.calculateEstimate();
+    }
+  }
+}

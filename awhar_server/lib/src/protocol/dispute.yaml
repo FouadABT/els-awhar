@@ -1,0 +1,45 @@
+### Disputes & Mediation ###
+
+class: Dispute
+table: disputes
+fields:
+  orderId: int, relation(parent=orders, onDelete=restrict)
+  
+  # Parties
+  openedByUserId: int, relation(parent=users)
+  clientId: int, relation(parent=user_clients)
+  driverId: int, relation(parent=driver_profiles)
+  
+  # Dispute Details
+  disputeType: DisputeType?
+  title: String
+  description: String
+  
+  # Evidence (Firebase Storage URLs)
+  evidenceUrls: List<String>?
+  
+  # Status
+  status: DisputeStatus?
+  
+  # Resolution
+  resolution: String?
+  resolvedByAdminId: int?, relation(parent=users)
+  resolvedAt: DateTime?
+  
+  # Refund
+  refundAmount: double?
+  refundIssued: bool, default=false
+  
+  # Timestamps
+  createdAt: DateTime, default=now
+  updatedAt: DateTime, default=now
+
+indexes:
+  disp_orderId_idx:
+    fields: orderId
+  disp_openedByUserId_idx:
+    fields: openedByUserId
+  disp_status_idx:
+    fields: status
+  disp_createdAt_idx:
+    fields: createdAt

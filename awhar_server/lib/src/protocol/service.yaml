@@ -1,0 +1,43 @@
+class: Service
+table: services
+fields:
+  categoryId: int, relation(parent=categories, onDelete=cascade)
+  
+  # Names (Multi-language)
+  nameEn: String
+  nameAr: String?
+  nameFr: String?
+  nameEs: String?
+  
+  # Descriptions
+  descriptionEn: String?
+  descriptionAr: String?
+  descriptionFr: String?
+  descriptionEs: String?
+  
+  # Visual
+  iconName: String?
+  imageUrl: String?
+  
+  # Default Pricing (drivers can override)
+  suggestedPriceMin: double?
+  suggestedPriceMax: double?
+  
+  # Settings
+  isActive: bool, default=true
+  displayOrder: int, default=0
+  isPopular: bool, default=false
+  
+  # Timestamps
+  createdAt: DateTime, default=now
+  updatedAt: DateTime, default=now
+
+indexes:
+  svc_categoryId_idx:
+    fields: categoryId
+  svc_isActive_idx:
+    fields: isActive
+  svc_displayOrder_idx:
+    fields: displayOrder
+  svc_isPopular_idx:
+    fields: isPopular

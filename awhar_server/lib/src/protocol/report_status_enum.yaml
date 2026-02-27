@@ -1,0 +1,7 @@
+enum: ReportStatus
+serialized: byIndex
+values:
+  - pending
+  - under_review
+  - resolved
+  - dismissed

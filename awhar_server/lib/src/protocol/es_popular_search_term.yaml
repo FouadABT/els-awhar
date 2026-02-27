@@ -1,0 +1,5 @@
+# Popular Search Term
+class: EsPopularSearchTerm
+fields:
+  term: String
+  count: int

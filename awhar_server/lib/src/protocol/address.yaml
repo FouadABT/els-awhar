@@ -1,0 +1,35 @@
+class: Address
+table: addresses
+fields:
+  userId: int, relation(parent=users, onDelete=cascade)
+  
+  # Address Details
+  label: String  # "Home", "Work", "Other"
+  fullAddress: String
+  cityId: int, relation(parent=cities)
+  
+  # Coordinates
+  latitude: double
+  longitude: double
+  
+  # Additional Info
+  buildingNumber: String?
+  floor: String?
+  apartmentNumber: String?
+  landmark: String?
+  instructions: String?  # "Ring bell twice"
+  
+  # Flags
+  isDefault: bool, default=false
+  
+  # Timestamps
+  createdAt: DateTime, default=now
+  updatedAt: DateTime, default=now
+
+indexes:
+  addr_userId_idx:
+    fields: userId
+  addr_cityId_idx:
+    fields: cityId
+  addr_isDefault_idx:
+    fields: isDefault

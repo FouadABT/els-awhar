@@ -1,0 +1,7 @@
+# Popular Service
+class: EsPopularService
+fields:
+  serviceId: int
+  serviceName: String?
+  categoryName: String?
+  driverCount: int

@@ -1,0 +1,19 @@
+class: UserClient
+table: user_clients
+fields:
+  userId: int, relation(parent=users, onDelete=cascade)
+  
+  # Preferences
+  defaultAddressId: int?, relation(parent=addresses)
+  defaultCityId: int?, relation(parent=cities)
+  
+  # Stats
+  totalOrders: int, default=0
+  
+  # Timestamps
+  createdAt: DateTime, default=now
+
+indexes:
+  uclient_userId_idx:
+    fields: userId
+    unique: true

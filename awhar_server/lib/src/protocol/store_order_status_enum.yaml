@@ -1,0 +1,15 @@
+### Store Order Status Enum ###
+
+enum: StoreOrderStatus
+serialized: byIndex
+values:
+  - pending         # Order placed, waiting for store confirmation
+  - confirmed       # Store confirmed, preparing
+  - preparing       # Store is preparing the order
+  - ready           # Ready for pickup by driver
+  - driverAssigned  # Driver assigned to the order
+  - pickedUp        # Driver picked up the order
+  - inDelivery      # Driver is delivering
+  - delivered       # Order delivered to client
+  - cancelled       # Order cancelled
+  - rejected        # Order rejected by store

@@ -1,0 +1,25 @@
+# Driver Service Search Hit
+class: EsDriverServiceHit
+fields:
+  id: int
+  driverId: int
+  driverUserId: int?
+  driverName: String?
+  driverPhoto: String?
+  driverRating: double?
+  driverIsVerified: bool
+  driverIsPremium: bool
+  driverIsOnline: bool
+  serviceId: int?
+  serviceName: String?
+  categoryId: int?
+  categoryName: String?
+  title: String?
+  description: String?
+  imageUrl: String?
+  priceType: String?
+  basePrice: double?
+  latitude: double?
+  longitude: double?
+  distance: double?
+  score: double?

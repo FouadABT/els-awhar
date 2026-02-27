@@ -1,0 +1,6 @@
+# Product Search Response
+class: EsProductSearchResult
+fields:
+  total: int
+  took: int
+  hits: List<EsProductHit>

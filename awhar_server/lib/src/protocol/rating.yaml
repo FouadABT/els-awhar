@@ -1,0 +1,32 @@
+## Rating model for client-driver reviews
+class: Rating
+table: ratings
+fields:
+  # References
+  requestId: int            # Service request this rating belongs to
+  raterId: int              # User who gave the rating
+  ratedUserId: int          # User who received the rating
+  
+  # Rating details
+  ratingValue: int          # Rating value (1-5 stars)
+  ratingType: RatingType    # client_to_driver or driver_to_client
+  
+  # Review content
+  reviewText: String?       # Optional review text
+  quickTags: List<String>?  # Quick tags like "friendly", "professional", etc.
+  
+  # Timestamps
+  createdAt: DateTime, default=now
+
+indexes:
+  rating_requestId_idx:
+    fields: requestId
+  rating_raterId_idx:
+    fields: raterId
+  rating_ratedUserId_idx:
+    fields: ratedUserId
+  rating_ratingType_idx:
+    fields: ratingType
+  rating_request_rater_unique:
+    fields: requestId, raterId
+    unique: true

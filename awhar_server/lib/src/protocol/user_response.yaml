@@ -1,0 +1,7 @@
+### User Response Model ###
+
+class: UserResponse
+fields:
+  success: bool
+  message: String
+  user: User?

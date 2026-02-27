@@ -1,0 +1,11 @@
+enum: AdminActionType
+serialized: byIndex
+values:
+  - user_suspended
+  - user_banned
+  - user_activated
+  - driver_verified
+  - driver_rejected
+  - dispute_resolved
+  - content_removed
+  - refund_issued

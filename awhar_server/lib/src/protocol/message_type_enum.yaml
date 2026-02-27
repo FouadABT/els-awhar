@@ -1,0 +1,7 @@
+enum: MessageType
+serialized: byIndex
+values:
+  - text
+  - image
+  - file
+  - system

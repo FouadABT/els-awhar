@@ -1,0 +1,23 @@
+class: OrderTracking
+table: order_tracking
+fields:
+  orderId: int, relation(parent=orders, onDelete=cascade)
+  driverId: int, relation(parent=driver_profiles)
+  
+  # GPS Coordinates
+  latitude: double
+  longitude: double
+  
+  # Metadata
+  accuracy: double?  # GPS accuracy in meters
+  speed: double?     # Speed in km/h
+  heading: double?   # Direction in degrees
+  
+  # Timestamp
+  recordedAt: DateTime, default=now
+
+indexes:
+  track_orderId_idx:
+    fields: orderId
+  track_recordedAt_idx:
+    fields: recordedAt

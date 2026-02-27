@@ -1,0 +1,9 @@
+## Transaction type enumeration
+enum: TransactionType
+values:
+  - payment          # Client payment to driver (cash)
+  - earning          # Driver earning from completed ride
+  - refund           # Refund to client (if ride cancelled)
+  - commission       # Platform commission from transaction
+  - adjustment       # Manual adjustment by admin
+  - bonus            # Bonus/incentive payment

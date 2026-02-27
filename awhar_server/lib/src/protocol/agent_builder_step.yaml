@@ -1,0 +1,21 @@
+# Agent Builder Step
+#
+# Represents a single step in the agent's execution.
+# Shows tool calls, results, and reasoning — perfect for UI display
+# to demonstrate the agentic workflow to hackathon judges.
+class: AgentBuilderStep
+fields:
+  ## Step type: "tool_call", "tool_result", "text", "reasoning"
+  type: String
+
+  ## Tool name if this is a tool call (e.g., "awhar.search_services")
+  toolName: String?
+
+  ## Tool input parameters as JSON string
+  toolInput: String?
+
+  ## Tool output/result as JSON string
+  toolOutput: String?
+
+  ## Free text content for reasoning or text steps
+  text: String?

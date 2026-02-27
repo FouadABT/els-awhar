@@ -1,0 +1,168 @@
+# ============================================
+# Awhar Backend - Git Ignore Configuration
+# ============================================
+# NOTE: This is a PRIVATE repository
+# Sensitive files (Firebase, .env) are INCLUDED intentionally
+
+# ============================================
+# Dart/Flutter Build Outputs
+# ============================================
+# Dart tool cache and generated files
+**/.dart_tool/
+**/build/
+**/.packages
+**/.flutter-plugins
+**/.flutter-plugins-dependencies
+**/pubspec.lock
+
+# Generated files (except protocol files we want to keep)
+*.g.dart
+*.freezed.dart
+*.mocks.dart
+
+# ============================================
+# Android Build Files
+# ============================================
+**/android/.gradle/
+**/android/app/build/
+**/android/gradle/
+**/android/gradlew
+**/android/gradlew.bat
+**/android/local.properties
+**/android/.idea/
+**/android/*.iml
+**/*.apk
+**/*.aab
+
+# ============================================
+# iOS Build Files
+# ============================================
+**/ios/.symlinks/
+**/ios/Pods/
+**/ios/Flutter/App.framework/
+**/ios/Flutter/Flutter.framework/
+**/ios/Flutter/Flutter.podspec
+**/ios/Flutter/Generated.xcconfig
+**/ios/Flutter/ephemeral/
+**/ios/Flutter/flutter_export_environment.sh
+**/ios/ServiceDefinitions.json
+**/ios/Runner/GeneratedPluginRegistrant.*
+**/*.xcworkspace/
+**/DerivedData/
+**/*.ipa
+
+# ============================================
+# macOS Build Files
+# ============================================
+**/macos/Flutter/ephemeral/
+**/macos/Flutter/GeneratedPluginRegistrant.swift
+**/macos/.symlinks/
+
+# ============================================
+# Windows Build Files
+# ============================================
+**/windows/flutter/ephemeral/
+**/windows/flutter/generated_plugin_registrant.*
+**/windows/flutter/generated_plugins.cmake
+
+# ============================================
+# Linux Build Files
+# ============================================
+**/linux/flutter/ephemeral/
+**/linux/flutter/generated_plugin_registrant.*
+**/linux/flutter/generated_plugins.cmake
+
+# ============================================
+# Web Build Files
+# ============================================
+**/web/flutter_service_worker.js
+
+# ============================================
+# Node.js / Next.js (Landing Page)
+# ============================================
+**/node_modules/
+**/.next/
+**/out/
+**/.pnp/
+**/.pnp.js
+**/npm-debug.log*
+**/yarn-debug.log*
+**/yarn-error.log*
+**/.npm/
+
+# ============================================
+# IDE and Editor Files
+# ============================================
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# ============================================
+# Serverpod Generated (Keep!)
+# NOTE: We keep generated protocol files as they are important
+# ============================================
+# awhar_server/lib/src/generated/ - KEEP
+# awhar_client/lib/src/protocol/ - KEEP
+
+# ============================================
+# Serverpod Server Specific
+# ============================================
+awhar_server/storage/
+awhar_server/logs/
+awhar_server/.serverpod/
+
+# ============================================
+# Test and Coverage
+# ============================================
+coverage/
+*.lcov
+.test_coverage/
+
+# ============================================
+# Docs (internal only, not for hackathon repo)
+# ============================================
+docs/
+README_old_backup.md
+
+# ============================================
+# Sensitive config files (for public repo)
+# ============================================
+awhar_server/config/awhar-5afc5-firebase-adminsdk-*.json
+landing_page/src/app/api/contact/route.ts
+
+# ============================================
+# Miscellaneous
+# ============================================
+*.log
+*.tmp
+*.temp
+*.bak
+*.cache
+
+# ============================================
+# Large Media Files (if accidentally added)
+# ============================================
+*.mp4
+*.mov
+*.avi
+*.mkv
+*.zip
+*.tar.gz
+*.rar
+
+# ============================================
+# IMPORTANT: Files that ARE INCLUDED
+# ============================================
+# The following sensitive files are INTENTIONALLY tracked
+# because this is a PRIVATE repository:
+#
+# ✅ .env (root level environment variables)
+# ✅ awhar_server/config/*.yaml (server configs)
+# ✅ awhar_server/config/*.json (Firebase admin SDK)
+# ✅ awhar_flutter/lib/firebase_options.dart
+# ✅ awhar_flutter/android/app/google-services.json
+# ✅ storage.rules (Firebase storage rules)

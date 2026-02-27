@@ -1,0 +1,27 @@
+## Trust Score result from AI fraud agent analysis
+## Returned to clients showing their trust level, and to drivers evaluating clients
+class: TrustScoreResult
+fields:
+  # Core trust metrics
+  trustScore: double          # 0-100 computed score
+  trustLevel: String          # EXCELLENT, GOOD, FAIR, LOW
+  
+  # Behavior metrics
+  totalOrders: int
+  completedOrders: int
+  cancelledOrders: int
+  ghostOrders: int
+  completionRate: double      # 0-100 percentage
+  
+  # Risk assessment
+  riskScore: int              # 0-100 fraud risk
+  riskLevel: String           # LOW, MODERATE, HIGH, CRITICAL
+  verdict: String             # ALLOW, MONITOR, VERIFY, BLOCK
+  
+  # Account info
+  accountAgeDays: int
+  totalValue: double          # Total GMV in MAD
+  
+  # Metadata
+  computedAt: DateTime
+  source: String              # "ai_agent" or "server_computed"

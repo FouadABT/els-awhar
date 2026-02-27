@@ -1,0 +1,92 @@
+name: Awhar Smart Request Processing
+description: Multi-agent orchestration pipeline chaining fraud check then driver matching then demand analysis in one automated workflow.
+enabled: true
+tags:
+  - awhar
+  - multi-agent
+  - orchestration
+  - hackathon
+triggers:
+  - type: manual
+inputs:
+  - name: client_id
+    type: string
+    description: The client user ID to process
+    required: true
+  - name: pickup_lat
+    type: number
+    description: Pickup latitude
+    required: true
+  - name: pickup_lng
+    type: number
+    description: Pickup longitude
+    required: true
+  - name: service_type
+    type: string
+    description: Service type such as delivery or ride or task
+    default: delivery
+    required: false
+steps:
+  - name: log_start
+    type: console
+    with:
+      message: Starting smart request processing for client {{ inputs.client_id }}
+
+  - name: fraud_check
+    type: kibana.request
+    with:
+      method: POST
+      path: /api/agent_builder/converse
+      headers:
+        kbn-xsrf: 'true'
+      body:
+        agent_id: '2'
+        connector_id: 'Google-Gemini-2-5-Flash'
+        input: Analyze client {{ inputs.client_id }} orders and compute their trust score. Return trust_score 0 to 100 and trust_level and completion_rate and cancellation_rate and recommendation ALLOW or BLOCK. Be concise.
+    timeout: 120s
+
+  - name: log_fraud
+    type: console
+    with:
+      message: 'Phase 1 Fraud Check Complete: {{ steps.fraud_check.output.response.message }}'
+
+  - name: find_drivers
+    type: kibana.request
+    with:
+      method: POST
+      path: /api/agent_builder/converse
+      headers:
+        kbn-xsrf: 'true'
+      body:
+        agent_id: awhar-match
+        connector_id: 'Google-Gemini-2-5-Flash'
+        input: Find the best drivers for a {{ inputs.service_type }} request near latitude {{ inputs.pickup_lat }} longitude {{ inputs.pickup_lng }}. Search 10km radius. Check performance stats and workload. Return ranked top 5 candidates.
+    timeout: 180s
+
+  - name: log_drivers
+    type: console
+    with:
+      message: 'Phase 2 Driver Matching Complete: {{ steps.find_drivers.output.response.message }}'
+
+  - name: check_demand
+    type: kibana.request
+    with:
+      method: POST
+      path: /api/agent_builder/converse
+      headers:
+        kbn-xsrf: 'true'
+      body:
+        agent_id: awhar-pulse
+        connector_id: 'Google-Gemini-2-5-Flash'
+        input: Check current driver demand alerts for {{ inputs.service_type }} service. Are there pending unmatched requests and how many drivers are needed. Provide a brief demand status.
+    timeout: 120s
+
+  - name: log_demand
+    type: console
+    with:
+      message: 'Phase 3 Demand Pulse Complete: {{ steps.check_demand.output.response.message }}'
+
+  - name: pipeline_complete
+    type: console
+    with:
+      message: Smart Request Processing Complete for client {{ inputs.client_id }}

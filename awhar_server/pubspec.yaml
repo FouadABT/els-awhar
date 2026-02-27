@@ -1,0 +1,38 @@
+name: awhar_server
+description: Starting point for a Serverpod server.
+# version: 1.0.0
+# homepage: https://www.example.com
+
+environment:
+  sdk: '^3.8.0'
+
+dependencies:
+  serverpod: 3.1.1
+  serverpod_auth_idp_server: 3.1.1
+  http: ^1.2.0
+  googleapis_auth: ^1.6.0
+  mailer: ^6.1.2
+  crypto: ^3.0.3
+  
+  # Elasticsearch Integration (Agent Builder Hackathon)
+  elastic_client: ^0.3.15      # Dart Elasticsearch client
+  dotenv: ^4.2.0               # Environment variable loading
+
+dev_dependencies:
+  lints: '>=3.0.0 <7.0.0'
+  serverpod_cli: 3.1.1
+  serverpod_test: 3.1.1
+  test: ^1.25.5
+
+
+serverpod:
+  scripts:
+    # Starts the server and applies migrations
+    start: dart bin/main.dart --apply-migrations
+
+    # Build the admin dashboard for local dev (/admin/ path on API server)
+    admin_build_local: cd ../awhar_admin && flutter build web --base-href /admin/ && powershell -Command "Remove-Item -Recurse -Force -ErrorAction SilentlyContinue ../awhar_server/web/admin; Copy-Item -Recurse -Force build/web/ ../awhar_server/web/admin"
+    
+    # Build the admin dashboard for cloud (/admin/ path)
+    # Uses PowerShell for Windows compatibility during local pre-deploy
+    admin_build: cd ../awhar_admin && flutter build web --base-href /admin/ && powershell -Command "Remove-Item -Recurse -Force -ErrorAction SilentlyContinue ../awhar_server/web/admin; Copy-Item -Recurse -Force build/web/ ../awhar_server/web/admin"

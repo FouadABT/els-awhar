@@ -1,0 +1,7 @@
+enum: SubscriptionStatus
+serialized: byIndex
+values:
+  - active
+  - expired
+  - cancelled
+  - pending_payment

@@ -1,0 +1,53 @@
+### Admin & Governance ###
+# Standalone admin authentication system
+# Supports super_admin, admin, moderator, support roles
+
+class: AdminUser
+table: admin_users
+fields:
+  # Optional link to main users table
+  userId: int?, relation(parent=users, onDelete=setNull)
+  
+  # Authentication
+  email: String
+  passwordHash: String
+  
+  # Profile
+  name: String
+  photoUrl: String?
+  
+  # Role: super_admin, admin, moderator, support
+  role: String, default='admin'
+  
+  # Permissions (JSON array of permission keys)
+  # e.g., ["users", "promos", "stores", "drivers", "reports", "settings"]
+  permissions: List<String>?
+  
+  # Status
+  isActive: bool, default=true
+  
+  # Security
+  lastLoginAt: DateTime?
+  lastLoginIp: String?
+  failedLoginAttempts: int, default=0
+  lockedUntil: DateTime?
+  
+  # Password reset
+  passwordResetToken: String?
+  passwordResetExpiry: DateTime?
+  
+  # Timestamps
+  createdAt: DateTime, default=now
+  updatedAt: DateTime, default=now
+  createdBy: int?
+
+indexes:
+  admin_email_idx:
+    fields: email
+    unique: true
+  admin_userId_idx:
+    fields: userId
+  admin_role_idx:
+    fields: role
+  admin_isActive_idx:
+    fields: isActive

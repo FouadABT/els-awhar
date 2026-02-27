@@ -1,0 +1,25 @@
+class: ServiceImage
+table: service_images
+fields:
+  driverServiceId: int, relation(parent=driver_services, onDelete=cascade)
+  
+  # Image Details
+  imageUrl: String
+  thumbnailUrl: String?
+  displayOrder: int, default=0
+  caption: String?
+  
+  # Metadata
+  fileSize: int?
+  width: int?
+  height: int?
+  
+  # Timestamps
+  createdAt: DateTime, default=now
+  updatedAt: DateTime, default=now
+
+indexes:
+  svc_img_driverServiceId_idx:
+    fields: driverServiceId
+  svc_img_displayOrder_idx:
+    fields: driverServiceId, displayOrder

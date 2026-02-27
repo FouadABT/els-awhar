@@ -1,0 +1,9 @@
+## Location model for storing geographic coordinates and address information
+class: Location
+fields:
+  latitude: double
+  longitude: double
+  address: String?
+  placeName: String?
+  city: String?
+  country: String?, default="Morocco"

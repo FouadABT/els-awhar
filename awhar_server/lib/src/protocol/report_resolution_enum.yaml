@@ -1,0 +1,8 @@
+enum: ReportResolution
+serialized: byIndex
+values:
+  - pending
+  - warning
+  - suspension
+  - ban
+  - dismissed

@@ -1,0 +1,31 @@
+### Device Fingerprint Input
+### Input data from Flutter app when registering/checking a fingerprint
+
+class: DeviceFingerprintInput
+fields:
+  ### The hash generated client-side
+  fingerprintHash: String
+  
+  ### Device identifiers
+  deviceId: String?
+  deviceModel: String?
+  deviceBrand: String?
+  
+  ### Screen info
+  screenWidth: int?
+  screenHeight: int?
+  screenDensity: double?
+  
+  ### Hardware specs
+  cpuCores: int?
+  isPhysicalDevice: bool?
+  
+  ### OS info
+  osVersion: String?
+  
+  ### Locale info
+  timezone: String?
+  language: String?
+  
+  ### App info
+  appVersion: String?

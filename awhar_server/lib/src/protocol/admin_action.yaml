@@ -1,0 +1,31 @@
+class: AdminAction
+table: admin_actions
+fields:
+  adminUserId: int, relation(parent=admin_users)
+  
+  # Action Type
+  actionType: AdminActionType?
+  
+  # Target
+  targetType: String  # user, driver, order, dispute, etc.
+  targetId: int
+  
+  # Details
+  reason: String?
+  notes: String?
+  
+  # Metadata
+  metadata: String?  # JSON
+  
+  # Timestamp
+  createdAt: DateTime, default=now
+
+indexes:
+  adminact_adminUserId_idx:
+    fields: adminUserId
+  adminact_targetType_idx:
+    fields: targetType
+  adminact_targetId_idx:
+    fields: targetId
+  adminact_createdAt_idx:
+    fields: createdAt

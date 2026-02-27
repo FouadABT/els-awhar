@@ -1,0 +1,33 @@
+## Wallet model for tracking user earnings and statistics
+class: Wallet
+table: wallets
+fields:
+  id: int?
+  
+  # User reference
+  userId: int
+  
+  # Balance tracking (for future online payments, currently informational)
+  totalEarned: double, default=0.0      # Total amount earned (drivers)
+  totalSpent: double, default=0.0       # Total amount spent (clients)
+  pendingEarnings: double, default=0.0  # Earnings from active rides (drivers)
+  
+  # Statistics
+  totalTransactions: int, default=0
+  completedRides: int, default=0         # Total completed rides
+  
+  # Platform commission tracking
+  totalCommissionPaid: double, default=0.0  # Commission paid to platform (drivers)
+  
+  # Currency
+  currency: String, default='MAD'
+  
+  # Timestamps
+  createdAt: DateTime, default=now
+  updatedAt: DateTime, default=now
+  lastTransactionAt: DateTime?
+
+indexes:
+  wallet_userId_index:
+    fields: userId
+    unique: true

@@ -1,0 +1,41 @@
+### Store Order Chat Message - Messages in 3-way store order chat ###
+
+class: StoreOrderChatMessage
+table: store_order_chat_messages
+fields:
+  # Chat Reference
+  chatId: int, relation(parent=store_order_chats, onDelete=cascade)
+  
+  # Sender
+  senderId: int, relation(parent=users)
+  senderRole: String  # 'client', 'store', 'driver', 'system'
+  senderName: String  # Display name at time of sending
+  
+  # Message Content
+  messageType: String, default='text'  # 'text', 'image', 'location', 'system'
+  content: String
+  attachmentUrl: String?
+  
+  # Location (for location messages)
+  latitude: double?
+  longitude: double?
+  
+  # Read status tracking - JSON map: {"userId": "timestamp"}
+  readByJson: String?
+  
+  # Firebase sync
+  firebaseId: String?
+  
+  # Timestamps
+  createdAt: DateTime, default=now
+
+indexes:
+  store_chat_msg_chatId_idx:
+    fields: chatId
+  store_chat_msg_senderId_idx:
+    fields: senderId
+  store_chat_msg_createdAt_idx:
+    fields: createdAt
+  store_chat_msg_firebaseId_idx:
+    fields: firebaseId
+    unique: true

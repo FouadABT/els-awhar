@@ -1,0 +1,19 @@
+### Review with Reviewer Info (DTO for reviews list) ###
+
+class: ReviewWithReviewer
+fields:
+  # Review data
+  reviewId: int
+  storeOrderId: int
+  reviewerId: int
+  revieweeType: String
+  revieweeId: int
+  rating: int
+  comment: String?
+  response: String?
+  responseAt: DateTime?
+  createdAt: DateTime
+  
+  # Reviewer info
+  reviewerName: String
+  reviewerPhotoUrl: String?

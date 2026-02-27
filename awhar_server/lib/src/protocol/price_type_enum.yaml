@@ -1,0 +1,7 @@
+enum: PriceType
+serialized: byIndex
+values:
+  - fixed
+  - per_km
+  - per_hour
+  - negotiable

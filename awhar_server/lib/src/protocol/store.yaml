@@ -1,0 +1,77 @@
+### Store Entity (Restaurants, Markets, Pharmacies, etc.) ###
+
+class: Store
+table: stores
+fields:
+  # Owner (User with store role)
+  userId: int, relation(parent=users, onDelete=cascade)
+  
+  # Category
+  storeCategoryId: int, relation(parent=store_categories)
+  
+  # Basic Info
+  name: String
+  description: String?
+  phone: String
+  email: String?
+  
+  # Extended Contact Info
+  whatsappNumber: String?
+  websiteUrl: String?
+  facebookUrl: String?
+  instagramUrl: String?
+  
+  # Extended Bio/About
+  aboutText: String?
+  tagline: String?
+  
+  # Visual
+  logoUrl: String?
+  coverImageUrl: String?
+  galleryImages: String?  # JSON array: ["url1", "url2", ...]
+  
+  # Location
+  address: String
+  latitude: double
+  longitude: double
+  city: String?
+  
+  # Delivery Settings
+  deliveryRadiusKm: double, default=5.0
+  minimumOrderAmount: double?, default=0.0
+  estimatedPrepTimeMinutes: int, default=30
+  
+  # Payment & Service Options
+  acceptsCash: bool, default=true
+  acceptsCard: bool, default=false
+  hasDelivery: bool, default=true
+  hasPickup: bool, default=false
+  
+  # Working Hours (JSON: {"monday": {"open": "09:00", "close": "22:00"}, ...})
+  workingHours: String?
+  
+  # Status
+  isActive: bool, default=true
+  isOpen: bool, default=false
+  
+  # Statistics
+  totalOrders: int, default=0
+  rating: double, default=0.0
+  totalRatings: int, default=0
+  
+  # Timestamps
+  createdAt: DateTime, default=now
+  updatedAt: DateTime, default=now
+
+indexes:
+  store_userId_idx:
+    fields: userId
+    unique: true
+  store_categoryId_idx:
+    fields: storeCategoryId
+  store_isActive_idx:
+    fields: isActive
+  store_isOpen_idx:
+    fields: isOpen
+  store_location_idx:
+    fields: latitude, longitude

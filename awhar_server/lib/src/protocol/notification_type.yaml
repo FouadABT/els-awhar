@@ -1,0 +1,9 @@
+### Notification Type Enum ###
+
+enum: NotificationType
+values:
+  - order
+  - delivery
+  - message
+  - system
+  - payment

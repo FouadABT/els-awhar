@@ -1,0 +1,15 @@
+# DTO for nearby driver with distance info
+# Used in FindDriverScreen to show drivers with their distance from store
+class: NearbyDriver
+fields:
+  ### Driver info
+  driver: DriverProfile
+
+  ### Distance from store in kilometers (null if location unknown)
+  distanceKm: double?
+
+  ### Whether driver has valid live location
+  hasLiveLocation: bool
+
+  ### Last location update time (null if no location)
+  lastLocationAt: DateTime?

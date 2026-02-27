@@ -1,0 +1,38 @@
+### Store Products (Items that can be ordered) ###
+
+class: StoreProduct
+table: store_products
+fields:
+  # Store that owns this product
+  storeId: int, relation(parent=stores, onDelete=cascade)
+  
+  # Category (optional, store-defined)
+  productCategoryId: int?, relation(parent=product_categories, onDelete=setNull)
+  
+  # Basic Info
+  name: String
+  description: String?
+  
+  # Pricing
+  price: double
+  
+  # Visual
+  imageUrl: String?
+  
+  # Settings
+  isAvailable: bool, default=true
+  displayOrder: int, default=0
+  
+  # Timestamps
+  createdAt: DateTime, default=now
+  updatedAt: DateTime, default=now
+
+indexes:
+  store_prod_storeId_idx:
+    fields: storeId
+  store_prod_categoryId_idx:
+    fields: productCategoryId
+  store_prod_isAvailable_idx:
+    fields: storeId, isAvailable
+  store_prod_displayOrder_idx:
+    fields: storeId, displayOrder

@@ -1,0 +1,39 @@
+## Driver proposal/bid for a service request
+## Multiple drivers can submit proposals, and client chooses the best one
+class: DriverProposal
+table: driver_proposals
+fields:
+  id: int?
+  
+  # References
+  requestId: int
+  driverId: int
+  
+  # Proposal details
+  proposedPrice: double?     # Driver can propose different price
+  estimatedArrival: int      # Minutes until driver can arrive at pickup
+  message: String?           # Optional message to client
+  
+  # Driver info (denormalized for quick display)
+  driverName: String
+  driverPhone: String?
+  driverRating: double?, default=0.0
+  driverVehicleInfo: String?
+  
+  # Status
+  status: ProposalStatus, default=pending
+  
+  # Timestamps
+  createdAt: DateTime, default=now
+  acceptedAt: DateTime?
+  rejectedAt: DateTime?
+
+indexes:
+  proposal_requestId_index:
+    fields: requestId
+  proposal_driverId_index:
+    fields: driverId
+  proposal_status_index:
+    fields: status
+  proposal_requestId_status_index:
+    fields: requestId, status

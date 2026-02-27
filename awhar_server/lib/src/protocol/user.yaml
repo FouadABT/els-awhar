@@ -1,0 +1,78 @@
+### Core User Identity ###
+
+class: User
+table: users
+fields:
+  # Firebase UID for authentication link
+  firebaseUid: String
+  
+  # Basic Info
+  fullName: String
+  phoneNumber: String?
+  email: String?
+  profilePhotoUrl: String?
+  
+  # Role & Status
+  roles: List<UserRole>
+  status: UserStatus?
+  isOnline: bool, default=false
+  
+  # Verification
+  isPhoneVerified: bool, default=false
+  isEmailVerified: bool, default=false
+  
+  # Driver-specific fields
+  rating: double?, default=0.0
+  totalRatings: int, default=0
+  totalRatingsAsClient: int, default=0   # Ratings received as client
+  ratingAsClient: double?, default=0.0   # Average rating as client
+  vehicleInfo: String?  # e.g., "Toyota Camry 2020 - White"
+  vehiclePlate: String?
+  
+  # Driver statistics (for proposal display)
+  averageRating: double?, default=0.0  # Same as rating, kept for compatibility
+  totalTrips: int, default=0           # Total completed trips as driver
+  
+  # Location tracking (for distance calculation)
+  currentLatitude: double?
+  currentLongitude: double?
+  lastLocationUpdate: DateTime?
+  
+  # Settings
+  preferredLanguage: Language?
+  notificationsEnabled: bool, default=true
+  darkModeEnabled: bool, default=false
+  fcmToken: String?
+  
+  # Suspension
+  isSuspended: bool, default=false
+  suspendedUntil: DateTime?
+  suspensionReason: String?
+  
+  # Reports Tracking
+  totalReportsReceived: int, default=0
+  totalReportsMade: int, default=0
+  
+  # Trust Score (computed by AI fraud agent)
+  trustScore: double?, default=0.0
+  trustLevel: String?, default='FAIR'
+  trustScoreUpdatedAt: DateTime?
+  
+  # Timestamps
+  createdAt: DateTime, default=now
+  updatedAt: DateTime, default=now
+  lastSeenAt: DateTime?
+  deletedAt: DateTime?
+
+indexes:
+  firebaseUid_idx:
+    fields: firebaseUid
+    unique: true
+  email_idx:
+    fields: email
+    unique: true
+  phoneNumber_idx:
+    fields: phoneNumber
+    unique: true
+  user_status_idx:
+    fields: status

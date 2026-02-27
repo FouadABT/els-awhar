@@ -1,0 +1,42 @@
+### Store Reports (Report issues with stores, drivers, clients, or orders) ###
+
+class: StoreReport
+table: store_reports
+fields:
+  # The order this report is related to (optional)
+  storeOrderId: int?, relation(parent=store_orders)
+  
+  # Reporter
+  reporterId: int, relation(parent=users)
+  reporterType: String  # 'client', 'store', 'driver'
+  
+  # Who/What is being reported
+  reportedType: String  # 'store', 'driver', 'client', 'order'
+  reportedId: int       # storeId, driverId, clientId, or orderId
+  
+  # Report Details
+  reason: String        # 'fraud', 'misconduct', 'quality', 'late', 'wrong_order', 'other'
+  description: String
+  
+  # Evidence (optional image URLs as JSON array)
+  evidenceUrls: String?
+  
+  # Resolution
+  status: String, default='pending'  # 'pending', 'investigating', 'resolved', 'dismissed'
+  resolution: String?
+  resolvedBy: int?
+  resolvedAt: DateTime?
+  
+  # Timestamps
+  createdAt: DateTime, default=now
+  updatedAt: DateTime, default=now
+
+indexes:
+  store_report_orderId_idx:
+    fields: storeOrderId
+  store_report_reporterId_idx:
+    fields: reporterId
+  store_report_reportedType_idx:
+    fields: reportedType, reportedId
+  store_report_status_idx:
+    fields: status

@@ -1,0 +1,31 @@
+class: ServiceAnalytics
+table: service_analytics
+fields:
+  driverServiceId: int, relation(parent=driver_services, onDelete=cascade)
+  
+  # View Metrics
+  totalViews: int, default=0
+  uniqueViews: int, default=0
+  lastViewedAt: DateTime?
+  
+  # Engagement Metrics
+  totalInquiries: int, default=0
+  totalBookings: int, default=0
+  conversionRate: double, default=0.0
+  
+  # Performance Metrics
+  averageResponseTime: int, default=0  # in seconds
+  completionRate: double, default=0.0
+  
+  # Timestamps
+  createdAt: DateTime, default=now
+  updatedAt: DateTime, default=now
+
+indexes:
+  svc_analytics_driverServiceId_idx:
+    fields: driverServiceId
+    unique: true
+  svc_analytics_totalViews_idx:
+    fields: totalViews
+  svc_analytics_totalBookings_idx:
+    fields: totalBookings

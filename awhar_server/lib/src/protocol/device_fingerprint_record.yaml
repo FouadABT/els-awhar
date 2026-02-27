@@ -1,0 +1,63 @@
+### Device Fingerprint for Fraud Detection
+### Stores device hardware fingerprints linked to user accounts
+### Used to detect multi-accounting and fraud patterns
+
+class: DeviceFingerprintRecord
+table: device_fingerprint_records
+fields:
+  ### Fingerprint identification
+  fingerprintHash: String             # SHA256 hash of device components
+  
+  ### Device identifiers (can be multiple per fingerprint due to reinstalls)
+  deviceId: String?                   # ANDROID_ID or identifierForVendor
+  deviceModel: String?                # e.g., "Samsung Galaxy S21"
+  deviceBrand: String?                # e.g., "Samsung", "Apple"
+  
+  ### Screen info
+  screenWidth: int?
+  screenHeight: int?
+  screenDensity: double?
+  
+  ### Hardware specs  
+  cpuCores: int?
+  isPhysicalDevice: bool?
+  
+  ### OS info
+  osVersion: String?                  # e.g., "Android 13", "iOS 17.2"
+  
+  ### Locale info
+  timezone: String?                   # e.g., "Africa/Casablanca"
+  language: String?                   # e.g., "ar_MA"
+  
+  ### App info
+  appVersion: String?
+  
+  ### Network info (captured on each check)
+  lastIpAddress: String?
+  
+  ### User associations (multi-value - stored as JSON array)
+  ### These are the user IDs that have used this device
+  userIds: String                     # JSON array of user IDs: "[1, 5, 23]"
+  
+  ### Risk assessment
+  riskScore: double                   # 0-100, higher = more risky
+  riskFactors: String?                # JSON array of risk reasons
+  isBlocked: bool                     # If true, block signups from this device
+  
+  ### Admin notes
+  notes: String?
+  
+  ### Timestamps
+  firstSeenAt: DateTime
+  lastSeenAt: DateTime
+  
+indexes:
+  device_fingerprint_hash_idx:
+    fields: fingerprintHash
+    unique: true
+  device_fingerprint_device_id_idx:
+    fields: deviceId
+  device_fingerprint_risk_idx:
+    fields: riskScore
+  device_fingerprint_blocked_idx:
+    fields: isBlocked

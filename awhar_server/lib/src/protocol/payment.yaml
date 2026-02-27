@@ -1,0 +1,43 @@
+class: Payment
+table: payments
+fields:
+  # Link to subscription or order
+  subscriptionId: int?, relation(parent=subscriptions)
+  orderId: int?, relation(parent=orders)
+  
+  # Payer
+  userId: int, relation(parent=users)
+  
+  # Payment Details
+  amount: double
+  currency: String, default='MAD'
+  paymentMethod: PaymentMethod?
+  
+  # Status
+  status: PaymentStatus?
+  
+  # External Reference
+  externalTransactionId: String?  # Stripe/PayPal ID
+  
+  # Metadata
+  metadata: String?  # JSON string
+  
+  # Failure Info
+  failureReason: String?
+  
+  # Timestamps
+  createdAt: DateTime, default=now
+  paidAt: DateTime?
+  refundedAt: DateTime?
+
+indexes:
+  pay_subscriptionId_idx:
+    fields: subscriptionId
+  pay_orderId_idx:
+    fields: orderId
+  pay_userId_idx:
+    fields: userId
+  pay_status_idx:
+    fields: status
+  pay_externalTransactionId_idx:
+    fields: externalTransactionId

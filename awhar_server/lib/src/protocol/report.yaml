@@ -1,0 +1,45 @@
+class: Report
+table: reports
+fields:
+  # Reporter
+  reportedByUserId: int, relation(parent=users)
+  reporterType: ReporterType?
+  
+  # Target
+  reportedDriverId: int?, relation(parent=driver_profiles)
+  reportedClientId: int?, relation(parent=user_clients)
+  reportedStoreId: int?, relation(parent=stores)
+  reportedOrderId: int?, relation(parent=orders)
+  reportedType: ReporterType?
+  
+  # Report Details
+  reportReason: ReportReason?
+  description: String
+  
+  # Evidence
+  evidenceUrls: List<String>?
+  
+  # Status
+  status: ReportStatus?
+  
+  # Resolution
+  resolution: ReportResolution?
+  reviewedByAdminId: int?, relation(parent=users)
+  reviewNotes: String?
+  adminNotes: String?
+  reviewedAt: DateTime?
+  resolvedAt: DateTime?
+  resolvedBy: int?, relation(parent=users)
+  
+  # Timestamps
+  createdAt: DateTime, default=now
+
+indexes:
+  report_reportedByUserId_idx:
+    fields: reportedByUserId
+  report_reportedDriverId_idx:
+    fields: reportedDriverId
+  report_status_idx:
+    fields: status
+  report_createdAt_idx:
+    fields: createdAt

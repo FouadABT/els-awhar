@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!-- Associated Domains for Universal Links (Deep Linking) -->
+	<key>com.apple.developer.associated-domains</key>
+	<array>
+		<!-- Serverpod Cloud domain (web server for deep links) -->
+		<string>applinks:awharapp.serverpod.space</string>
+		<string>webcredentials:awharapp.serverpod.space</string>
+		
+		<!-- API domain (future use) -->
+		<string>applinks:api.awhar.com</string>
+		<string>webcredentials:api.awhar.com</string>
+		
+		<!-- Development mode - allows testing without SSL -->
+		<!-- Remove these lines for production release -->
+		<string>applinks:awharapp.serverpod.space?mode=developer</string>
+		<string>applinks:api.awhar.com?mode=developer</string>
+	</array>
+	
+	<!-- Push Notifications -->
+	<key>aps-environment</key>
+	<string>development</string>
+</dict>
+</plist>
